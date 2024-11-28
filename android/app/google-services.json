@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491776635494",
+    "project_id": "huduma-6c21f",
+    "storage_bucket": "huduma-6c21f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491776635494:android:baf7efe713b29b5b0e73a7",
+        "android_client_info": {
+          "package_name": "com.example.huduma"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIf--T0q7hIIRNjXrprC3Xih78Z9HDKrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
