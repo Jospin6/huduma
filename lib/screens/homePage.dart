@@ -11,78 +11,50 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Map<String, String>> emergencyOptions = [
     {
-      'title': 'Appel d\'urgence',
-      'image': 'https://example.com/image1.jpg', // Remplacez par votre URL d'image
+      'title': 'Insécurité',
+      'image': 'assets/images/ins.png',
     },
     {
-      'title': 'Ambulance',
-      'image': 'https://example.com/image2.jpg', // Remplacez par votre URL d'image
+      'title': 'Accident de la route',
+      'image': 'assets/images/acc.png',
     },
     {
-      'title': 'Pompiers',
-      'image': 'https://example.com/image3.jpg', // Remplacez par votre URL d'image
+      'title': 'Urgence médicale',
+      'image': 'assets/images/med.png',
     },
     {
-      'title': 'Police',
-      'image': 'https://example.com/image4.jpg', // Remplacez par votre URL d'image
+      'title': 'Incendies',
+      'image': 'assets/images/incendie.png',
+    },
+    {
+      'title': 'Agression / Violences',
+      'image': 'assets/images/viol.png',
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Accueil - Urgences'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Nombre de colonnes
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemCount: emergencyOptions.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                // Action à effectuer lors du tap sur une option
-                print('Option sélectionnée: ${emergencyOptions[index]['title']}');
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(emergencyOptions[index]['image']!),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black54, // Couleur de fond semi-transparente
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  alignment: Alignment.bottomLeft,
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    emergencyOptions[index]['title']!,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 200,
+              decoration: BoxDecoration(
+                  image: const DecorationImage(
+                      image: AssetImage("assets/images/incendie.png"),
+                      fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(15.0)),
+              child: const Stack(
+                children: [
+                  Positioned(top: 10, right: 10, child: Text("Appeler")),
+                  Positioned(bottom: 10, left: 10, child: Text("Appeler")),
+                ],
               ),
-            );
-          },
+            )
+          ],
         ),
       ),
     );
