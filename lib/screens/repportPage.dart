@@ -79,20 +79,20 @@ class _ReportPageState extends State<ReportPage> {
                 );
               }).toList(),
             ),
-            SizedBox(height: 20),
-            Text('Localisation:', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 20),
+            const Text('Localisation:', style: TextStyle(fontSize: 18)),
             TextField(
               controller: locationController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Entrez la localisation',
               ),
               onChanged: updateSuggestions,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: suggestions.length,
               itemBuilder: (context, index) {
                 return ListTile(
