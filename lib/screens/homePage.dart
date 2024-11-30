@@ -37,25 +37,30 @@ class _HomePageState extends State<HomePage> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                  image: const DecorationImage(
-                      image: AssetImage("assets/images/incendie.png"),
-                      fit: BoxFit.cover),
-                  borderRadius: BorderRadius.circular(15.0)),
-              child: const Stack(
-                children: [
-                  Positioned(top: 10, right: 10, child: Text("Appeler")),
-                  Positioned(bottom: 10, left: 10, child: Text("Appeler")),
-                ],
+        child: ListView.builder(
+        itemCount: emergencyOptions.length,
+        itemBuilder: (context, index) {
+          final option = emergencyOptions[index];
+          return Container(
+            width: double.infinity,
+            height: 200,
+            margin: const EdgeInsets.only(bottom: 5),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(option['image']!),
+                fit: BoxFit.cover,
               ),
-            )
-          ],
-        ),
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Stack(
+              children: [
+                const Positioned(top: 10, right: 10, child: Text("Appeler")),
+                Positioned(bottom: 10, left: 10, child: Text(option['title']!)),
+              ],
+            ),
+          );
+        },
+      ),
       ),
     );
   }
