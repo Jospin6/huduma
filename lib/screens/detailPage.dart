@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:huduma/screens/widgets/expansionTextWidget.dart';
 
 class DetailPage extends StatelessWidget {
   final Map<String, String> emergencyDetail;
@@ -79,6 +80,8 @@ class DetailPage extends StatelessWidget {
                     ),
 
                     // AUTRES INFORMATIONS
+
+                    const ExpansionTextWidget()
                 
                   ],
                 ),
