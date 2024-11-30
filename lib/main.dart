@@ -22,10 +22,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   int _currentIndex = 0;
 
-  setCurrentIndex(int index){
+  void setCurrentIndex(int index) {
     setState(() {
       _currentIndex = index;
     });
@@ -48,14 +47,63 @@ class _MyAppState extends State<MyApp> {
             const Text("Notifications"),
             const Text("Infos")
           ][_currentIndex],
+          leading: IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer(); // Ouvrir le drawer
+            },
+          ),
         ),
         body: [
           const HomePage(),
           const ChatPage(),
-          const SignalerPage(),
+          SignalerPage(),
           NotificationsPage(),
           const InfosPage()
         ][_currentIndex],
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                ),
+                child: Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Paramètres'),
+                onTap: () {
+                  // Action pour Paramètres
+                  Navigator.pop(context); // Fermer le drawer
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.notifications),
+                title: const Text('Alertes'),
+                onTap: () {
+                  // Action pour Alertes
+                  Navigator.pop(context); // Fermer le drawer
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.account_circle),
+                title: const Text('Mon Compte'),
+                onTap: () {
+                  // Action pour Mon Compte
+                  Navigator.pop(context); // Fermer le drawer
+                },
+              ),
+            ],
+          ),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) => setCurrentIndex(index),
@@ -64,12 +112,13 @@ class _MyAppState extends State<MyApp> {
           unselectedItemColor: Colors.grey,
           elevation: 10,
           items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Accueil"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Chat"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "+"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Notif"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Infos")
-        ]),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Accueil"),
+            BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+            BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add"),
+            BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notif"),
+            BottomNavigationBarItem(icon: Icon(Icons.info), label: "Infos")
+          ],
+        ),
       ),
     );
   }
