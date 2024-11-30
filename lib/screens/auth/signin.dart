@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:huduma/screens/auth/userInfos.dart';
+import 'package:huduma/utils/user_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
@@ -31,35 +32,43 @@ class _SignInState extends State<SignIn> {
       // Naviguez vers la page principale si l'utilisateur est déjà enregistré
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const UserInfos(uid: '')), // Placeholder
+        MaterialPageRoute(
+            builder: (context) => const UserInfos(uid: '')), // Placeholder
       );
     }
   }
 
   Future<void> _registerUser() async {
-    try {
-      // Créer un compte anonyme
-      UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
-      String uid = userCredential.user?.uid ?? '';
+    if (_formKey.currentState!.validate()) {
+      try {
+        // Créer un compte anonyme
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInAnonymously();
+        String uid = userCredential.user?.uid ?? '';
 
-      // Stocker les informations de l'utilisateur dans Firestore
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
-        'name': name,
-        'lastName': lastName,
-        'phoneNumber': phoneNumber,
-      });
+        // Stocker les informations de l'utilisateur dans Firestore
+        await FirebaseFirestore.instance.collection('users').doc(uid).set({
+          'name': name,
+          'lastName': lastName,
+          'phoneNumber': phoneNumber,
+        });
 
-      // Enregistrer l'état de l'utilisateur
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isUserRegistered', true);
+        // Enregistrer l'UID et l'état de l'utilisateur
+        await UserPreferences.saveUserUID(uid); // Utiliser la classe utilitaire
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isUserRegistered', true);
 
-      // Naviguer vers la page UserInfos avec l'UID
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => UserInfos(uid: uid)),
-      );
-    } catch (e) {
-      print(e); // Gérer les erreurs ici
+        // Naviguer vers la page UserInfos avec l'UID
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => UserInfos(uid: uid)),
+        );
+      } catch (e) {
+        print(e); // Gérer les erreurs ici
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors de l\'enregistrement: $e')),
+        );
+      }
     }
   }
 

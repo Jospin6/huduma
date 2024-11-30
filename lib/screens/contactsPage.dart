@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ContactsPage extends StatefulWidget {
   const ContactsPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ContactsPageState createState() => _ContactsPageState();
 }
 
 class _ContactsPageState extends State<ContactsPage> {
-  final List<Contact> _contacts = [];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void _addContact(String name, String phone) {
-    setState(() {
-      _contacts.add(Contact(name: name, phone: phone));
-    });
-    Navigator.of(context).pop(); 
+  void _addContact(String name, String phone) async {
+    if (name.isNotEmpty && phone.isNotEmpty) {
+      await _firestore.collection('contacts').add({
+        'name': name,
+        'phone': phone,
+      });
+      Navigator.of(context).pop(); 
+    }
   }
 
   void _showAddContactDialog() {
@@ -51,9 +54,7 @@ class _ContactsPageState extends State<ContactsPage> {
           actions: [
             TextButton(
               onPressed: () {
-                if (name.isNotEmpty && phone.isNotEmpty) {
-                  _addContact(name, phone);
-                }
+                _addContact(name, phone);
               },
               child: Text('Ajouter'),
             ),
@@ -74,26 +75,43 @@ class _ContactsPageState extends State<ContactsPage> {
             child: Text('Ajouter Contact'),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _contacts.length,
-              itemBuilder: (context, index) {
-                final contact = _contacts[index];
-                return ListTile(
-                  leading: Container(
-                    width: 40,
-                    height: 40,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      contact.name[0].toUpperCase(),
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ),
-                  title: Text(contact.name),
-                  subtitle: Text(contact.phone),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _firestore.collection('contacts').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                final contacts = snapshot.data!.docs.map((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  return Contact(
+                    name: data['name'],
+                    phone: data['phone'],
+                  );
+                }).toList();
+
+                return ListView.builder(
+                  itemCount: contacts.length,
+                  itemBuilder: (context, index) {
+                    final contact = contacts[index];
+                    return ListTile(
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          contact.name[0].toUpperCase(),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                      title: Text(contact.name),
+                      subtitle: Text(contact.phone),
+                    );
+                  },
                 );
               },
             ),

@@ -79,8 +79,7 @@ class _InfosPageState extends State<InfosPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: const DecorationImage(
-                      image: NetworkImage(
-                          'https://via.placeholder.com/300'), // Remplacez par votre URL d'image
+                      image: AssetImage("assets/images/ins.png"), // Remplacez par votre URL d'image
                       fit: BoxFit.cover,
                     ),
                   ),
