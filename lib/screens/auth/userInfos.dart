@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:huduma/screens/homePage.dart';
 
 class UserInfos extends StatefulWidget {
-  const UserInfos({super.key});
+  final String uid;
+
+  const UserInfos({super.key, required this.uid});
 
   @override
   _UserInfosState createState() => _UserInfosState();
@@ -11,6 +15,29 @@ class _UserInfosState extends State<UserInfos> {
   final _formKey = GlobalKey<FormState>();
   String age = '';
   String gender = 'Homme';
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        // Enregistrer les informations supplémentaires dans Firestore
+        await FirebaseFirestore.instance.collection('userInfos').doc(widget.uid).set({
+          'age': age,
+          'gender': gender,
+        });
+
+        // Rediriger vers la page d'accueil
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } catch (e) {
+        print(e); // Gérer les erreurs ici
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors de la soumission du formulaire')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +81,7 @@ class _UserInfosState extends State<UserInfos> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Logique pour soumettre le formulaire
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Formulaire soumis avec succès!')),
-                    );
-                  }
-                },
+                onPressed: _submitForm, // Appeler la méthode de soumission
                 child: Text('Soumettre'),
               ),
             ],
