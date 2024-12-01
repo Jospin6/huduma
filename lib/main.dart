@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:huduma/screens/chatPage.dart';
 import 'package:huduma/screens/homePage.dart';
 import 'package:huduma/screens/infosPage.dart';
+import 'package:huduma/screens/messageriePage.dart';
 import 'package:huduma/screens/notificationsPage.dart';
 import 'package:huduma/screens/signalerPage.dart';
 import 'firebase_options.dart';
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: [
           const HomePage(),
-          const ChatPage(),
+          const MessageriePage(),
           SignalerPage(),
           NotificationsPage(),
           const InfosPage()

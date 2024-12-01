@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:huduma/screens/widgets/alerteAppelWidget.dart';
+import 'package:huduma/utils/emergency_options.dart';
 import 'package:huduma/utils/user_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,35 +25,7 @@ class _HomePageState extends State<HomePage> {
         await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
     setState(() {});
   }
-
-  final List<Map<String, String>> emergencyOptions = [
-    {
-      'title': 'Insécurité',
-      'image': 'assets/images/ins.png',
-      'num_tele': '117'
-    },
-    {
-      'title': 'Accident de la route',
-      'image': 'assets/images/acc.png',
-      'num_tele': '112'
-    },
-    {
-      'title': 'Urgence médicale',
-      'image': 'assets/images/med.png',
-      'num_tele': '116'
-    },
-    {
-      'title': 'Incendies',
-      'image': 'assets/images/incendie.png',
-      'num_tele': '118'
-    },
-    {
-      'title': 'Agression / Violences',
-      'image': 'assets/images/viol.png',
-      'num_tele': '117'
-    },
-  ];
-
+  
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
