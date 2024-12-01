@@ -20,12 +20,12 @@ class _UtilisateursPageState extends State<UtilisateursPage> {
   }
 
   Future<void> _fetchUsers() async {
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').get();
+    final QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').get();
     setState(() {
-      _users = snapshot.docs.map((doc) => {
-        'id': doc.id,
-        ...doc.data() as Map<String, dynamic>
-      }).toList();
+      _users = snapshot.docs
+          .map((doc) => {'id': doc.id, ...doc.data() as Map<String, dynamic>})
+          .toList();
       _filteredUsers = _users;
     });
   }
@@ -41,26 +41,69 @@ class _UtilisateursPageState extends State<UtilisateursPage> {
   }
 
   void _showEditDialog(String userId) {
+    // Liste des urgences
+    final List<String> urgences = [
+      'Insécurité',
+      'Accident de la route',
+      'Urgence médicale',
+      'Incendies',
+      'Catastrophe naturelle',
+    ];
+
+    // Variable pour stocker l'urgence sélectionnée
+    String? selectedUrgence;
+
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Modifier le rôle'),
-          content: Text('Voulez-vous vraiment changer le rôle de cet utilisateur en "admin" ?'),
+          title: Text('Modifier l\'urgence'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Veuillez choisir une urgence :'),
+              DropdownButton<String>(
+                value: selectedUrgence,
+                hint: Text('Sélectionner une urgence'),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedUrgence = newValue;
+                  });
+                },
+                items: urgences.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () async {
-                await FirebaseFirestore.instance.collection('users').doc(userId).update({'role': 'admin'});
-                Navigator.of(context).pop();
-                _fetchUsers(); // Recharger les utilisateurs
+                if (selectedUrgence != null) {
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(userId)
+                      .update({'urgence': selectedUrgence});
+                  Navigator.of(context).pop();
+                  _fetchUsers(); // Recharger les utilisateurs
+                } else {
+                  // Afficher un message d'erreur si aucune urgence n'est sélectionnée
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text('Veuillez sélectionner une urgence')),
+                  );
+                }
               },
-              child: Text('Oui'),
+              child: Text('Valider'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Non'),
+              child: Text('Annuler'),
             ),
           ],
         );
@@ -107,11 +150,12 @@ class _UtilisateursPageState extends State<UtilisateursPage> {
               ),
               child: Text(
                 initials,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             title: Text('${user['name']} ${user['lastName']}'),
-            subtitle: Text('Rôle: ${user['role']}'),
+            subtitle: Text('Urgence: ${user['urgence']}'),
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () => _showEditDialog(user['id']),

@@ -20,7 +20,7 @@ final List<Map<String, String>> emergencyOptions = [
     'num_tele': '118'
   },
   {
-    'title': 'Agression / Violences',
+    'title': 'Catastrophe naturelle',
     'image': 'assets/images/viol.png',
     'num_tele': '117'
   },

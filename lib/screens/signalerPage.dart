@@ -31,10 +31,10 @@ class _SignalerPageState extends State<SignalerPage> {
   }
 
   final List<String> signalementTypes = [
-    'Accident',
-    'Agression',
-    'Viol',
-    'Incendie',
+    'Insécurité',
+    'Accident de la route',
+    'Urgence médicale',
+    'Incendies',
     'Catastrophe naturelle',
   ];
 
