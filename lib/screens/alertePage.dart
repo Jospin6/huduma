@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:huduma/screens/gesteDeProtectionForm.dart';
 
 class AlertePage extends StatefulWidget {
   final String title;
@@ -51,6 +52,18 @@ class _AlertePageState extends State<AlertePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+              onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GesteDeProtectionForm(typeUrgence: widget.title)),
+                    )
+                  },
+              icon: const Icon(Icons.add))
+        ],
       ),
       body: alerts.isEmpty
           ? const Center(child: Text('Aucune alerte trouvée.'))

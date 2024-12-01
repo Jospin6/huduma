@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ExpansionTextWidget extends StatefulWidget {
-  const ExpansionTextWidget({super.key});
+  final String titre;
+  final String description;
+  final String image;
+  const ExpansionTextWidget({super.key, required this.titre, required this.description, required this.image});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -24,19 +27,19 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
                 width: 80,
                 height: 50,
               ),
-              const Expanded(
+              Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Text 1',
+                      widget.titre,
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                     ),
-                    Text(
-                      'Text 2',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
+                    // Text(
+                    //   widget.description,
+                    //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    // ),
                   ],
                 ),
               ),
@@ -55,8 +58,8 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: _isExpanded
-                ? const Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                ? Text(
+                    widget.description,
                   )
                 : Container(), // Utilisez un Container vide si non étendu
           ),
