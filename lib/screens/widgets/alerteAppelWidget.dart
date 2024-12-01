@@ -30,8 +30,11 @@ class AlerteAppelWidget extends StatelessWidget {
           final contacts = await _getContacts();
           Position position = await _getUserLocation();
 
+          // Récupérer le nom de l'utilisateur
+          String userName = await _getUserName(userUID);
+
           for (var contact in contacts) {
-            await _sendSms(contact['phone'], position);
+            await _sendSms(contact['phone'], position, userName);
           }
 
           await _saveEmergencyAlert(position);
@@ -74,8 +77,20 @@ class AlerteAppelWidget extends StatelessWidget {
         locationSettings: locationSettings);
   }
 
-  Future<void> _sendSms(String phone, Position position) async {
-    String userName = 'Nom Utilisateur'; // Remplacez par le nom de l'utilisateur
+  Future<String> _getUserName(String userUID) async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userUID)
+        .get();
+
+    if (userDoc.exists) {
+      return userDoc['nom'] ?? 'Nom Inconnu'; 
+    } else {
+      throw 'Utilisateur non trouvé';
+    }
+  }
+
+  Future<void> _sendSms(String phone, Position position, String userName) async {
     String message =
         'Alerte, $userName vient de lancer une alerte ${option['title']} '
         'il se trouve à ${position.latitude}, ${position.longitude}. '
