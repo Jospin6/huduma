@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:huduma/utils/user_preferences.dart';
 
 class ContactsPage extends StatefulWidget {
   const ContactsPage({super.key});
@@ -9,11 +10,27 @@ class ContactsPage extends StatefulWidget {
 }
 
 class _ContactsPageState extends State<ContactsPage> {
+
+  String? userUID;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserUID();
+  }
+
+  Future<void> _loadUserUID() async {
+    userUID =
+        await UserPreferences.getUserUID(); 
+    setState(() {});
+  }
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void _addContact(String name, String phone) async {
     if (name.isNotEmpty && phone.isNotEmpty) {
       await _firestore.collection('contacts').add({
+        'userUID': userUID,
         'name': name,
         'phone': phone,
       });

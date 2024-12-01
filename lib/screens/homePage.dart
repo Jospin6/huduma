@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:huduma/screens/widgets/alerteAppelWidget.dart';
 import 'package:huduma/utils/user_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +20,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadUserUID() async {
-    userUID = await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
+    userUID =
+        await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
     setState(() {});
   }
 
@@ -27,22 +29,27 @@ class _HomePageState extends State<HomePage> {
     {
       'title': 'Insécurité',
       'image': 'assets/images/ins.png',
+      'num_tele': '117'
     },
     {
       'title': 'Accident de la route',
       'image': 'assets/images/acc.png',
+      'num_tele': '112'
     },
     {
       'title': 'Urgence médicale',
       'image': 'assets/images/med.png',
+      'num_tele': '116'
     },
     {
       'title': 'Incendies',
       'image': 'assets/images/incendie.png',
+      'num_tele': '118'
     },
     {
       'title': 'Agression / Violences',
       'image': 'assets/images/viol.png',
+      'num_tele': '117'
     },
   ];
 
@@ -68,7 +75,11 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Stack(
                 children: [
-                  const Positioned(top: 10, right: 10, child: Text("Appeler")),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: AlerteAppelWidget(userUID: userUID!, option: option),
+                  ),
                   Positioned(
                       bottom: 10, left: 10, child: Text(option['title']!)),
                 ],
