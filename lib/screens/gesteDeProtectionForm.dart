@@ -16,15 +16,28 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
   String titre = '';
   String description = '';
   XFile? image;
+  bool isLoading = false; // Indicateur de chargement
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
-    image = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {});
+    try {
+      image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {});
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la sélection de l\'image: $e')),
+      );
+    }
   }
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate() && image != null) {
+      setState(() {
+        isLoading = true; // Démarrer le chargement
+      });
+
       try {
         await FirebaseFirestore.instance.collection('geste_protection').add({
           'type_urgence': widget.typeUrgence,
@@ -44,9 +57,12 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
           titre = '';
           description = '';
           image = null;
+          isLoading = false; // Fin du chargement
         });
       } catch (e) {
-        print(e);
+        setState(() {
+          isLoading = false; // Fin du chargement en cas d'erreur
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erreur lors de la soumission: $e')),
         );
@@ -100,10 +116,12 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
               SizedBox(height: 10),
               if (image != null) Text('Image sélectionnée: ${image!.name}'),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Valider'),
-              ),
+              isLoading
+                  ? CircularProgressIndicator() // Indicateur de chargement
+                  : ElevatedButton(
+                      onPressed: _submitForm,
+                      child: Text('Valider'),
+                    ),
             ],
           ),
         ),

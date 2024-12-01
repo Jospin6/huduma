@@ -5,29 +5,43 @@ class NotificationsPage extends StatelessWidget {
   NotificationsPage({super.key});
 
   Future<List<Map<String, dynamic>>> _fetchNotifications() async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('notifications').get();
-    return snapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('notifications').get();
+      return snapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    } catch (e) {
+      throw Exception('Erreur lors de la récupération des notifications: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: const Text('Notifications'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _fetchNotifications(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  const SizedBox(height: 16),
+                  const Text('Chargement des notifications...'),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
             return Center(
-                child: Text('Erreur lors du chargement des notifications'));
+              child: Text('Erreur lors du chargement des notifications: ${snapshot.error}'),
+            );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucune notification disponible'));
+            return Center(child: const Text('Aucune notification disponible.'));
           }
 
           final notifications = snapshot.data!;
@@ -45,12 +59,10 @@ class NotificationsPage extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: Colors.blueAccent,
                   ),
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    title.isNotEmpty
-                        ? title[0]
-                        : '?', // Première lettre du titre
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    title.isNotEmpty ? title[0] : '?', // Première lettre du titre
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
                 title: Text(title),

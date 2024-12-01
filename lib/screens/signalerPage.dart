@@ -15,8 +15,8 @@ class _SignalerPageState extends State<SignalerPage> {
   String ville = '';
   String description = '';
   XFile? photo;
-
   String? userUID;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -25,8 +25,7 @@ class _SignalerPageState extends State<SignalerPage> {
   }
 
   Future<void> _loadUserUID() async {
-    userUID =
-        await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
+    userUID = await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
     setState(() {});
   }
 
@@ -42,6 +41,56 @@ class _SignalerPageState extends State<SignalerPage> {
     final ImagePicker _picker = ImagePicker();
     photo = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {});
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true; // Indicateur de chargement
+      });
+
+      try {
+        // Créer un document dans la collection 'signalement'
+        await FirebaseFirestore.instance.collection('signalement').add({
+          'userUID': userUID,
+          'type': signalementType,
+          'lieu': lieu,
+          'ville': ville,
+          'description': description,
+          'photo': photo?.path, // Vous pouvez stocker le chemin de la photo ou l'URL après l'avoir téléchargée
+          'timestamp': FieldValue.serverTimestamp(), // Ajouter un timestamp
+        });
+
+        // Créer un document dans la collection 'notifications'
+        await FirebaseFirestore.instance.collection('notifications').add({
+          'titre': signalementType,
+          'contenu': description,
+          'timestamp': FieldValue.serverTimestamp(), // Ajouter un timestamp
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Signalement soumis avec succès!')),
+        );
+
+        // Réinitialiser le formulaire ou naviguer ailleurs si nécessaire
+        _formKey.currentState!.reset();
+        setState(() {
+          signalementType = null;
+          lieu = '';
+          ville = '';
+          description = '';
+          photo = null;
+        });
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors de l\'envoi: $e')),
+        );
+      } finally {
+        setState(() {
+          isLoading = false; // Arrêter l'indicateur de chargement
+        });
+      }
+    }
   }
 
   @override
@@ -124,58 +173,10 @@ class _SignalerPageState extends State<SignalerPage> {
             if (photo != null) Text('Photo sélectionnée: ${photo!.name}'),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  try {
-                    // Créer un document dans la collection 'signalement'
-                    await FirebaseFirestore.instance
-                        .collection('signalement')
-                        .add({
-                      'userUID': userUID,
-                      'type': signalementType,
-                      'lieu': lieu,
-                      'ville': ville,
-                      'description': description,
-                      'photo': photo
-                          ?.path, // Vous pouvez stocker le chemin de la photo ou l'URL après l'avoir téléchargée
-                      'timestamp':
-                          FieldValue.serverTimestamp(), // Ajouter un timestamp
-                    });
-
-                    // Créer un document dans la collection 'notifications'
-                    await FirebaseFirestore.instance
-                        .collection('notifications')
-                        .add({
-                      'titre': signalementType,
-                      'contenu': description,
-                      'timestamp':
-                          FieldValue.serverTimestamp(), // Ajouter un timestamp
-                    });
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text('Signalement soumis avec succès!')),
-                    );
-
-                    // Réinitialiser le formulaire ou naviguer ailleurs si nécessaire
-                    _formKey.currentState!.reset();
-                    setState(() {
-                      signalementType = null;
-                      lieu = '';
-                      ville = '';
-                      description = '';
-                      photo = null;
-                    });
-                  } catch (e) {
-                    print(e); // Gérer les erreurs ici
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text('Erreur lors de la soumission: $e')),
-                    );
-                  }
-                }
-              },
-              child: Text('Soumettre'),
+              onPressed: isLoading ? null : _submitForm, // Désactiver le bouton pendant le chargement
+              child: isLoading
+                  ? CircularProgressIndicator() // Indicateur de chargement sur le bouton
+                  : Text('Soumettre le signalement'),
             ),
           ],
         ),

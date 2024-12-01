@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:huduma/utils/user_preferences.dart';
 
+class Contact {
+  final String name;
+  final String phone;
+
+  Contact({required this.name, required this.phone});
+}
+
 class ContactsPage extends StatefulWidget {
   const ContactsPage({super.key});
 
@@ -10,7 +17,6 @@ class ContactsPage extends StatefulWidget {
 }
 
 class _ContactsPageState extends State<ContactsPage> {
-
   String? userUID;
 
   @override
@@ -20,8 +26,7 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   Future<void> _loadUserUID() async {
-    userUID =
-        await UserPreferences.getUserUID(); 
+    userUID = await UserPreferences.getUserUID();
     setState(() {});
   }
 
@@ -29,12 +34,22 @@ class _ContactsPageState extends State<ContactsPage> {
 
   void _addContact(String name, String phone) async {
     if (name.isNotEmpty && phone.isNotEmpty) {
-      await _firestore.collection('contacts').add({
-        'userUID': userUID,
-        'name': name,
-        'phone': phone,
-      });
-      Navigator.of(context).pop(); 
+      try {
+        await _firestore.collection('contacts').add({
+          'userUID': userUID,
+          'name': name,
+          'phone': phone,
+        });
+        Navigator.of(context).pop();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors de l\'ajout du contact: $e')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Veuillez remplir tous les champs.')),
+      );
     }
   }
 
@@ -137,11 +152,4 @@ class _ContactsPageState extends State<ContactsPage> {
       ),
     );
   }
-}
-
-class Contact {
-  final String name;
-  final String phone;
-
-  Contact({required this.name, required this.phone});
 }

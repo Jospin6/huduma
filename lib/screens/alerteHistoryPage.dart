@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:huduma/utils/user_preferences.dart';
+import 'package:intl/intl.dart'; // Importer pour formater les dates
 
 class AlertHistoryPage extends StatefulWidget {
   const AlertHistoryPage({super.key});
@@ -12,6 +13,7 @@ class AlertHistoryPage extends StatefulWidget {
 class _AlertHistoryPageState extends State<AlertHistoryPage> {
   String? userUID;
   List<Map<String, dynamic>> alerts = [];
+  bool isLoading = true; // Indicateur de chargement
 
   @override
   void initState() {
@@ -20,24 +22,36 @@ class _AlertHistoryPageState extends State<AlertHistoryPage> {
   }
 
   Future<void> _loadUserUID() async {
-    userUID = await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
+    userUID = await UserPreferences.getUserUID();
     if (userUID != null) {
-      _fetchAlerts();
+      await _fetchAlerts();
     }
   }
 
   Future<void> _fetchAlerts() async {
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('alerte_urgence')
-        .where('userUID', isEqualTo: userUID)
-        .get();
+    try {
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('alerte_urgence')
+          .where('userUID', isEqualTo: userUID)
+          .get();
 
-    setState(() {
-      alerts = snapshot.docs.map((doc) => {
-        'id': doc.id,
-        ...doc.data() as Map<String, dynamic>
-      }).toList();
-    });
+      setState(() {
+        alerts = snapshot.docs.map((doc) {
+          return {
+            'id': doc.id,
+            ...doc.data() as Map<String, dynamic>
+          };
+        }).toList();
+        isLoading = false; // Fin du chargement
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Fin du chargement même en cas d'erreur
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la récupération des alertes: $e')),
+      );
+    }
   }
 
   @override
@@ -46,25 +60,26 @@ class _AlertHistoryPageState extends State<AlertHistoryPage> {
       appBar: AppBar(
         title: const Text('Historique des Alertes'),
       ),
-      body: alerts.isEmpty
-          ? const Center(child: Text('Aucune alerte trouvée.'))
-          : ListView.builder(
-              itemCount: alerts.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(alerts[index]['title']),
-                  subtitle: Text('Date: ${alerts[index]['date'].toDate()}'),
-                  leading: const Icon(Icons.notifications),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    // Action à effectuer lors du clic sur l'alerte
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Vous avez cliqué sur ${alerts[index]['title']}')),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator()) // Indicateur de chargement
+          : alerts.isEmpty
+              ? const Center(child: Text('Aucune alerte trouvée.'))
+              : ListView.builder(
+                  itemCount: alerts.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(alerts[index]['title']),
+                      subtitle: Text('Date: ${DateFormat('dd/MM/yyyy HH:mm').format(alerts[index]['date'].toDate())}'), // Formatage de la date
+                      leading: const Icon(Icons.notifications),
+                      trailing: const Icon(Icons.arrow_forward),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Vous avez cliqué sur ${alerts[index]['title']}')),
+                        );
+                      },
                     );
                   },
-                );
-              },
-            ),
+                ),
     );
   }
 }

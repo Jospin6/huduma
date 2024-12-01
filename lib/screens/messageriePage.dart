@@ -16,28 +16,33 @@ class _MessageriePageState extends State<MessageriePage> {
       appBar: AppBar(
         title: const Text('Options d\'Urgence'),
       ),
-      body: ListView.builder(
-        itemCount: emergencyOptions.length,
-        itemBuilder: (context, index) {
-          final option = emergencyOptions[index];
-          return ListTile(
-            leading: CircleAvatar(
-              radius: 25, 
-              backgroundImage: AssetImage(option['image']!), 
+      body: emergencyOptions.isEmpty
+          ? const Center(child: CircularProgressIndicator()) // Indicateur de chargement si la liste est vide
+          : ListView.builder(
+              itemCount: emergencyOptions.length,
+              itemBuilder: (context, index) {
+                final option = emergencyOptions[index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    radius: 25,
+                    backgroundImage: option['image'] != null
+                        ? AssetImage(option['image']!)
+                        : null, // Gestion de l'image
+                    backgroundColor: Colors.grey, // Couleur de fond par défaut
+                  ),
+                  title: Text(option['title'] ?? 'Titre inconnu'),
+                  subtitle: Text(option['num_tele'] ?? 'Numéro inconnu'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatPage(option: option),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
-            title: Text(option['title']!),
-            subtitle: Text(option['num_tele']!),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatPage(option: option),
-                ),
-              );
-            },
-          );
-        },
-      ),
     );
   }
 }

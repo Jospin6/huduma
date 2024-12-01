@@ -5,6 +5,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+class Message {
+  final String text;
+  final bool isUser;
+  final String? imageUrl;
+
+  Message({required this.text, required this.isUser, this.imageUrl});
+}
+
 class ChatPage extends StatefulWidget {
   final Map<String, dynamic> option;
 
@@ -20,6 +28,7 @@ class _ChatPageState extends State<ChatPage> {
   String? userUID;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  bool isLoading = false; // Indicateur de chargement pour l'image
 
   @override
   void initState() {
@@ -44,8 +53,14 @@ class _ChatPageState extends State<ChatPage> {
         'is_readed': false,
       };
 
-      await _firestore.collection('chats').add(message);
-      _controller.clear();
+      try {
+        await _firestore.collection('chats').add(message);
+        _controller.clear();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors de l\'envoi du message: $e')),
+        );
+      }
     }
   }
 
@@ -62,7 +77,7 @@ class _ChatPageState extends State<ChatPage> {
           messages.add(Message(
             text: doc['message'],
             isUser: doc['userUID'] == userUID,
-            imageUrl: doc['imageUrl'], // Ajoutez cette ligne pour récupérer l'URL de l'image
+            imageUrl: doc['imageUrl'], // Récupérer l'URL de l'image
           ));
         }
       });
@@ -73,18 +88,21 @@ class _ChatPageState extends State<ChatPage> {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
+      setState(() {
+        isLoading = true; // Démarrer le chargement
+      });
       String imageUrl = await _uploadImage(File(image.path));
       _sendMessage(imageUrl: imageUrl); // Envoyer le message avec l'URL de l'image
+      setState(() {
+        isLoading = false; // Fin du chargement
+      });
     }
   }
 
   Future<String> _uploadImage(File image) async {
     try {
-      // Créez un chemin unique pour l'image
       String filePath = 'chat_images/${DateTime.now().millisecondsSinceEpoch}.png';
-      // Téléchargez l'image sur Firebase Storage
       await _storage.ref(filePath).putFile(image);
-      // Obtenez l'URL de téléchargement de l'image
       String downloadUrl = await _storage.ref(filePath).getDownloadURL();
       return downloadUrl;
     } catch (e) {
@@ -127,9 +145,10 @@ class _ChatPageState extends State<ChatPage> {
                         child: Text(
                           messages[index].text,
                           style: TextStyle(
-                              color: messages[index].isUser
-                                  ? Colors.white
-                                  : Colors.black),
+                            color: messages[index].isUser
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                         ),
                       ),
                       if (messages[index].imageUrl != null && messages[index].imageUrl!.isNotEmpty)
@@ -177,16 +196,13 @@ class _ChatPageState extends State<ChatPage> {
               ],
             ),
           ),
+          if (isLoading) // Indicateur de chargement pendant le téléchargement de l'image
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(),
+            ),
         ],
       ),
     );
   }
-}
-
-class Message {
-  final String text;
-  final bool isUser;
-  final String? imageUrl; // Ajoutez cette propriété pour l'URL de l'image
-
-  Message({required this.text, required this.isUser, this.imageUrl});
 }

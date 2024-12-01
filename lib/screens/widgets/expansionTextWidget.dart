@@ -4,10 +4,15 @@ class ExpansionTextWidget extends StatefulWidget {
   final String titre;
   final String description;
   final String image;
-  const ExpansionTextWidget({super.key, required this.titre, required this.description, required this.image});
+
+  const ExpansionTextWidget({
+    super.key,
+    required this.titre,
+    required this.description,
+    required this.image,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
   _ExpansionTextWidgetState createState() => _ExpansionTextWidgetState();
 }
 
@@ -22,10 +27,12 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
         children: [
           Row(
             children: [
+              // Utilisation de l'image passée en paramètre
               Image.asset(
-                'assets/images/viol.png', 
+                widget.image,
                 width: 80,
                 height: 50,
+                fit: BoxFit.cover, // Ajout d'un fit pour une meilleure présentation
               ),
               Expanded(
                 child: Column(
@@ -34,12 +41,13 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
                   children: [
                     Text(
                       widget.titre,
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      style: TextStyle(
+                        color: Colors.black, // Changer la couleur pour plus de contraste
+                        fontSize: 16, // Augmenter la taille pour une meilleure visibilité
+                        fontWeight: FontWeight.bold, // Mettre en gras pour le titre
+                      ),
                     ),
-                    // Text(
-                    //   widget.description,
-                    //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    // ),
+                    // Affichage de la description si nécessaire
                   ],
                 ),
               ),
@@ -60,8 +68,9 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
             child: _isExpanded
                 ? Text(
                     widget.description,
+                    style: TextStyle(fontSize: 14), // Style pour la description
                   )
-                : Container(), // Utilisez un Container vide si non étendu
+                : Container(), // Conteneur vide si non étendu
           ),
         ],
       ),

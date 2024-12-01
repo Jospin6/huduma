@@ -10,6 +10,7 @@ class InfosPage extends StatefulWidget {
 
 class _InfosPageState extends State<InfosPage> {
   List<Map<String, dynamic>> signalements = [];
+  bool isLoading = true; // Indicateur de chargement
 
   @override
   void initState() {
@@ -18,18 +19,29 @@ class _InfosPageState extends State<InfosPage> {
   }
 
   Future<void> _fetchSignalements() async {
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('signalement')
-        .get();
+    try {
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('signalement')
+          .get();
 
-    List<Map<String, dynamic>> tempSignalements = [];
-    for (var doc in snapshot.docs) {
-      tempSignalements.add(doc.data() as Map<String, dynamic>);
+      List<Map<String, dynamic>> tempSignalements = [];
+      for (var doc in snapshot.docs) {
+        tempSignalements.add(doc.data() as Map<String, dynamic>);
+      }
+
+      setState(() {
+        signalements = tempSignalements;
+      });
+    } catch (e) {
+      print('Erreur lors de la récupération des signalements: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la récupération des signalements.')),
+      );
+    } finally {
+      setState(() {
+        isLoading = false; // Fin du chargement
+      });
     }
-
-    setState(() {
-      signalements = tempSignalements;
-    });
   }
 
   @override
@@ -38,85 +50,88 @@ class _InfosPageState extends State<InfosPage> {
       appBar: AppBar(
         title: const Text('Signalements'),
       ),
-      body: signalements.isEmpty
-          ? const Center(child: Text('Aucun signalement trouvé.'))
-          : ListView.builder(
-              itemCount: signalements.length,
-              itemBuilder: (context, index) {
-                final signalement = signalements[index];
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator()) // Indicateur de chargement
+          : signalements.isEmpty
+              ? const Center(child: Text('Aucun signalement trouvé.'))
+              : ListView.builder(
+                  itemCount: signalements.length,
+                  itemBuilder: (context, index) {
+                    final signalement = signalements[index];
 
-                return Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Titre de la Card
-                        Text(
-                          signalement['type'] ?? 'Type inconnu',
-                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10), // Espacement
-
-                        // Column pour lieu, ville, commune
-                        Column(
+                    return Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Titre de la Card
                             Text(
-                              'Lieu: ',
-                              style: TextStyle(color: Colors.grey),
+                              signalement['type'] ?? 'Type inconnu',
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              signalement['lieu'] ?? 'Lieu inconnu',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 5), // Espacement
+                            const SizedBox(height: 10), // Espacement
 
-                            Text(
-                              'Ville: ',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              signalement['ville'] ?? 'Ville inconnue',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 5), // Espacement
+                            // Column pour lieu, ville, commune
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Lieu: ',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  signalement['lieu'] ?? 'Lieu inconnu',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 5), // Espacement
 
-                            Text(
-                              'Description: ',
-                              style: TextStyle(color: Colors.grey),
+                                Text(
+                                  'Ville: ',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  signalement['ville'] ?? 'Ville inconnue',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 5), // Espacement
+
+                                Text(
+                                  'Description: ',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  signalement['description'] ?? 'Aucune description',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                            Text(
-                              signalement['description'] ?? 'Aucune description',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                            const SizedBox(height: 10), // Espacement
+
+                            // Image
+                            if (signalement['photo'] != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Image.network(
+                                  signalement['photo'],
+                                  fit: BoxFit.cover,
+                                  height: 150, // Hauteur de l'image
+                                  width: double.infinity, // Largeur de l'image
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Text('Erreur de chargement de l\'image.');
+                                  },
+                                ),
+                              ),
                           ],
                         ),
-                        const SizedBox(height: 10), // Espacement
-
-                        // Image
-                        if (signalement['photo'] != null) 
-                          Container(
-                            width: double.infinity,
-                            height: 300,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: NetworkImage(signalement['photo']),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                      ),
+                    );
+                  },
+                ),
     );
   }
 }

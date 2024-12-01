@@ -14,42 +14,34 @@ class AlerteAppelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        final phoneNumber = option['num_tele']!;
+        final phoneNumber = option['num_tele'] ?? '';
         final Uri launchUri = Uri(
           scheme: 'tel',
           path: phoneNumber,
         );
 
         try {
-          // Vérifiez si l'URL peut être lancée
           if (await canLaunchUrl(launchUri)) {
-            // Lancez l'appel
             await launchUrl(launchUri);
           } else {
             throw 'Impossible de lancer $launchUri';
           }
 
-          // Récupérer les contacts de l'utilisateur
           final contacts = await _getContacts();
-
-          // Récupérer la localisation de l'utilisateur
           Position position = await _getUserLocation();
 
-          // Envoyer des SMS à chaque contact
           for (var contact in contacts) {
             await _sendSms(contact['phone'], position);
           }
 
-          // Enregistrer l'alerte d'urgence dans Firestore
           await _saveEmergencyAlert(position);
 
           await FirebaseFirestore.instance.collection('notifications').add({
             'titre': option['title'],
-            'contenu': 'y a une alerte ${option['title']} dans votre region',
-            'timestamp': FieldValue.serverTimestamp(), // Ajouter un timestamp
+            'contenu': 'y a une alerte ${option['title']} dans votre région',
+            'timestamp': FieldValue.serverTimestamp(),
           });
         } catch (e) {
-          // Gérer l'erreur
           print('Erreur: $e');
         }
       },
@@ -58,7 +50,6 @@ class AlerteAppelWidget extends StatelessWidget {
   }
 
   Future<List<Map<String, dynamic>>> _getContacts() async {
-    // Récupérer les contacts de Firestore
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('contacts')
         .where('userUID', isEqualTo: userUID)
@@ -69,16 +60,14 @@ class AlerteAppelWidget extends StatelessWidget {
   }
 
   Future<Position> _getUserLocation() async {
-    // Demander la permission de localisation
     LocationPermission permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
       throw 'Permission de localisation refusée';
     }
 
-    // Obtenir la position actuelle avec les nouveaux paramètres
     LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high,
-      distanceFilter: 10, // Distance en mètres pour les mises à jour
+      distanceFilter: 10,
     );
 
     return await Geolocator.getCurrentPosition(
@@ -86,23 +75,19 @@ class AlerteAppelWidget extends StatelessWidget {
   }
 
   Future<void> _sendSms(String phone, Position position) async {
-    String userName =
-        'Nom Utilisateur'; // Remplacez par le nom de l'utilisateur
+    String userName = 'Nom Utilisateur'; // Remplacez par le nom de l'utilisateur
     String message =
         'Alerte, $userName vient de lancer une alerte ${option['title']} '
         'il se trouve à ${position.latitude}, ${position.longitude}. '
         'Veuillez l\'assister ou appeler les services d\'urgence appropriés pour son secours, merci.';
 
     try {
-      // Envoi du SMS
       String result = await sendSMS(message: message, recipients: [phone])
-          // ignore: body_might_complete_normally_catch_error
           .catchError((onError) {
         print(onError);
       });
       print('Résultat de l\'envoi: $result');
     } catch (e) {
-      // Gérer les erreurs d'envoi de SMS
       print('Erreur lors de l\'envoi du SMS à $phone: $e');
     }
   }
@@ -116,7 +101,6 @@ class AlerteAppelWidget extends StatelessWidget {
         'latitude': position.latitude,
         'longitude': position.longitude,
       },
-      'is_read': false,
     });
   }
 }

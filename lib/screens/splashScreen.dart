@@ -20,19 +20,31 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _loadUserUID() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userUID = prefs.getString('userUID'); // Récupérer le userUID
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      userUID = prefs.getString('userUID'); // Récupérer le userUID
 
-    // Attendre quelques secondes pour simuler le chargement
-    await Future.delayed(const Duration(seconds: 2));
+      // Attendre quelques secondes pour simuler le chargement
+      await Future.delayed(const Duration(seconds: 2));
 
-    // Naviguer vers la bonne page
-    if (userUID != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const SignIn()), 
+      // Naviguer vers la bonne page
+      if (userUID != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const SignIn()), 
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MyApp()), 
+        );
+      }
+    } catch (e) {
+      // Gestion des erreurs
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la récupération des données: $e')),
       );
-    } else {
+      // Naviguer vers la page principale en cas d'erreur
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const MyApp()), 
@@ -44,7 +56,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: const CircularProgressIndicator(), // Indicateur de chargement
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const CircularProgressIndicator(), // Indicateur de chargement
+            const SizedBox(height: 20),
+            const Text('Chargement...', style: TextStyle(fontSize: 16)),
+          ],
+        ),
       ),
     );
   }

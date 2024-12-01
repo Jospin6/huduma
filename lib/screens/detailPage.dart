@@ -17,6 +17,7 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   List<Map<String, dynamic>> gestesProtection = [];
   String? userUID;
+  bool isLoading = true; // Indicateur de chargement
 
   @override
   void initState() {
@@ -26,26 +27,34 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _loadUserUID() async {
-    userUID =
-        await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
+    userUID = await UserPreferences.getUserUID();
     setState(() {});
   }
 
   Future<void> _fetchGesteProtection() async {
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('geste_protection')
-        .where('titre',
-            isEqualTo: widget.emergencyDetail['title']) // Filtrer par titre
-        .get();
+    try {
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('geste_protection')
+          .where('titre', isEqualTo: widget.emergencyDetail['title'])
+          .get();
 
-    List<Map<String, dynamic>> tempGestes = [];
-    for (var doc in snapshot.docs) {
-      tempGestes.add(doc.data() as Map<String, dynamic>);
+      List<Map<String, dynamic>> tempGestes = [];
+      for (var doc in snapshot.docs) {
+        tempGestes.add(doc.data() as Map<String, dynamic>);
+      }
+
+      setState(() {
+        gestesProtection = tempGestes;
+        isLoading = false; // Fin du chargement
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Fin du chargement même en cas d'erreur
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la récupération des gestes: $e')),
+      );
     }
-
-    setState(() {
-      gestesProtection = tempGestes;
-    });
   }
 
   @override
@@ -114,16 +123,23 @@ class _DetailPageState extends State<DetailPage> {
                     topLeft: Radius.circular(50),
                     topRight: Radius.circular(50),
                   ),
+                  color: Colors.white, // Ajout d'une couleur de fond
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      widget.emergencyDetail['details']!,
-                      style: const TextStyle(fontSize: 18),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        widget.emergencyDetail['details']!,
+                        style: const TextStyle(fontSize: 18),
+                      ),
                     ),
+                    // Indicateur de chargement
+                    if (isLoading)
+                      const Center(child: CircularProgressIndicator()),
                     // Affichage des gestes de protection
                     Expanded(
-                      child: gestesProtection.isEmpty
+                      child: gestesProtection.isEmpty && !isLoading
                           ? const Center(
                               child: Text('Aucun geste de protection trouvé.'))
                           : ListView.builder(
