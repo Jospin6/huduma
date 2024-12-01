@@ -51,6 +51,7 @@ class _SignInState extends State<SignIn> {
           'name': name,
           'lastName': lastName,
           'phoneNumber': phoneNumber,
+          'role': 'simple'
         });
 
         // Enregistrer l'UID et l'état de l'utilisateur
