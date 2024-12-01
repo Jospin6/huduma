@@ -83,6 +83,7 @@ class AlerteAppelWidget extends StatelessWidget {
 
     try {
       String result = await sendSMS(message: message, recipients: [phone])
+          // ignore: body_might_complete_normally_catch_error
           .catchError((onError) {
         print(onError);
       });
