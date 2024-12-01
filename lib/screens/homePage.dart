@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:huduma/screens/detailPage.dart';
 import 'package:huduma/screens/widgets/alerteAppelWidget.dart';
 import 'package:huduma/utils/emergency_options.dart';
 import 'package:huduma/utils/user_preferences.dart';
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
         await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
     setState(() {});
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -54,7 +55,17 @@ class _HomePageState extends State<HomePage> {
                     child: AlerteAppelWidget(userUID: userUID!, option: option),
                   ),
                   Positioned(
-                      bottom: 10, left: 10, child: Text(option['title']!)),
+                      bottom: 10,
+                      left: 10,
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DetailPage(option)),
+                            );
+                          },
+                          child: Text(option['title']!))),
                 ],
               ),
             );

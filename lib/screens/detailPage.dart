@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:huduma/screens/alertePage.dart';
 import 'package:huduma/screens/widgets/alerteAppelWidget.dart';
 import 'package:huduma/screens/widgets/expansionTextWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,7 +34,8 @@ class _DetailPageState extends State<DetailPage> {
   Future<void> _fetchGesteProtection() async {
     final QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('geste_protection')
-        .where('titre', isEqualTo: widget.emergencyDetail['title']) // Filtrer par titre
+        .where('titre',
+            isEqualTo: widget.emergencyDetail['title']) // Filtrer par titre
         .get();
 
     List<Map<String, dynamic>> tempGestes = [];
@@ -83,7 +85,23 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ],
                   ),
-                  AlerteAppelWidget(userUID: userUID!, option: widget.emergencyDetail),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AlertePage(
+                                    title: widget.emergencyDetail['title']!)),
+                          );
+                        },
+                        child: const Text('Alertes'),
+                      ),
+                      AlerteAppelWidget(
+                          userUID: userUID!, option: widget.emergencyDetail),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -106,14 +124,16 @@ class _DetailPageState extends State<DetailPage> {
                     // Affichage des gestes de protection
                     Expanded(
                       child: gestesProtection.isEmpty
-                          ? const Center(child: Text('Aucun geste de protection trouvé.'))
+                          ? const Center(
+                              child: Text('Aucun geste de protection trouvé.'))
                           : ListView.builder(
                               itemCount: gestesProtection.length,
                               itemBuilder: (context, index) {
                                 final geste = gestesProtection[index];
                                 return ExpansionTextWidget(
                                   titre: geste['titre'] ?? 'Titre inconnu',
-                                  description: geste['description'] ?? 'Aucune description',
+                                  description: geste['description'] ??
+                                      'Aucune description',
                                   image: geste['image'] ?? '',
                                 );
                               },
