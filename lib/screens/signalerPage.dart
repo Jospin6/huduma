@@ -142,6 +142,16 @@ class _SignalerPageState extends State<SignalerPage> {
                           FieldValue.serverTimestamp(), // Ajouter un timestamp
                     });
 
+                    // Créer un document dans la collection 'notifications'
+                    await FirebaseFirestore.instance
+                        .collection('notifications')
+                        .add({
+                      'titre': signalementType,
+                      'contenu': description,
+                      'timestamp':
+                          FieldValue.serverTimestamp(), // Ajouter un timestamp
+                    });
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                           content: Text('Signalement soumis avec succès!')),

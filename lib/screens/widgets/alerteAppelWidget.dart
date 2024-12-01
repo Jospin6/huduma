@@ -42,6 +42,12 @@ class AlerteAppelWidget extends StatelessWidget {
 
           // Enregistrer l'alerte d'urgence dans Firestore
           await _saveEmergencyAlert(position);
+
+          await FirebaseFirestore.instance.collection('notifications').add({
+            'titre': option['title'],
+            'contenu': 'y a une alerte ${option['title']} dans votre region',
+            'timestamp': FieldValue.serverTimestamp(), // Ajouter un timestamp
+          });
         } catch (e) {
           // Gérer l'erreur
           print('Erreur: $e');
