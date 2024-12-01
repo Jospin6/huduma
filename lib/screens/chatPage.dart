@@ -1,24 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:huduma/utils/user_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  final Map<String, dynamic> option;
+
+  const ChatPage({super.key, required this.option});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
   final List<Message> messages = [];
   final TextEditingController _controller = TextEditingController();
+  String? userUID;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
+  @override
+  void initState() {
+    super.initState();
+    _loadUserUID();
+    _fetchMessages();
+  }
+
+  Future<void> _loadUserUID() async {
+    userUID = await UserPreferences.getUserUID();
+    setState(() {});
+  }
+
+  Future<void> _sendMessage({String? imageUrl}) async {
+    if (_controller.text.isNotEmpty || imageUrl != null) {
+      final message = {
+        'userUID': userUID,
+        'title': widget.option['title'],
+        'message': _controller.text,
+        'imageUrl': imageUrl,
+        'date': FieldValue.serverTimestamp(),
+        'is_readed': false,
+      };
+
+      await _firestore.collection('chats').add(message);
+      _controller.clear();
+    }
+  }
+
+  Future<void> _fetchMessages() async {
+    _firestore
+        .collection('chats')
+        .where('title', isEqualTo: widget.option['title'])
+        .orderBy('date', descending: true)
+        .snapshots()
+        .listen((snapshot) {
       setState(() {
-        messages.add(Message(text: _controller.text, isUser: true));
-        messages.add(Message(text: "Réponse automatique", isUser: false)); // Simuler une réponse
-        _controller.clear();
+        messages.clear();
+        for (var doc in snapshot.docs) {
+          messages.add(Message(
+            text: doc['message'],
+            isUser: doc['userUID'] == userUID,
+            imageUrl: doc['imageUrl'], // Ajoutez cette ligne pour récupérer l'URL de l'image
+          ));
+        }
       });
+    });
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      String imageUrl = await _uploadImage(File(image.path));
+      _sendMessage(imageUrl: imageUrl); // Envoyer le message avec l'URL de l'image
+    }
+  }
+
+  Future<String> _uploadImage(File image) async {
+    try {
+      // Créez un chemin unique pour l'image
+      String filePath = 'chat_images/${DateTime.now().millisecondsSinceEpoch}.png';
+      // Téléchargez l'image sur Firebase Storage
+      await _storage.ref(filePath).putFile(image);
+      // Obtenez l'URL de téléchargement de l'image
+      String downloadUrl = await _storage.ref(filePath).getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print('Échec du téléchargement de l\'image: $e');
+      return '';
     }
   }
 
@@ -26,27 +97,52 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat d\'Urgence'),
+        title: Text('Chat d\'Urgence ${widget.option['title']}'),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
+              reverse: true, // Pour afficher les messages les plus récents en haut
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 return Align(
-                  alignment: messages[index].isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: messages[index].isUser ? Colors.blueAccent : Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      messages[index].text,
-                      style: TextStyle(color: messages[index].isUser ? Colors.white : Colors.black),
-                    ),
+                  alignment: messages[index].isUser
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: messages[index].isUser
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: messages[index].isUser
+                              ? Colors.blueAccent
+                              : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          messages[index].text,
+                          style: TextStyle(
+                              color: messages[index].isUser
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                      ),
+                      if (messages[index].imageUrl != null && messages[index].imageUrl!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Image.network(
+                            messages[index].imageUrl!,
+                            width: 200, // Ajustez la largeur selon vos besoins
+                            height: 200, // Ajustez la hauteur selon vos besoins
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                    ],
                   ),
                 );
               },
@@ -56,6 +152,10 @@ class _ChatPageState extends State<ChatPage> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
+                IconButton(
+                  icon: Icon(Icons.add_a_photo),
+                  onPressed: _pickImage,
+                ),
                 Expanded(
                   child: TextField(
                     controller: _controller,
@@ -72,7 +172,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 IconButton(
                   icon: Icon(Icons.send),
-                  onPressed: _sendMessage,
+                  onPressed: () => _sendMessage(),
                 ),
               ],
             ),
@@ -86,6 +186,7 @@ class _ChatPageState extends State<ChatPage> {
 class Message {
   final String text;
   final bool isUser;
+  final String? imageUrl; // Ajoutez cette propriété pour l'URL de l'image
 
-  Message({required this.text, required this.isUser});
+  Message({required this.text, required this.isUser, this.imageUrl});
 }
