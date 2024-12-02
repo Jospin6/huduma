@@ -5,10 +5,10 @@ import 'package:image_picker/image_picker.dart';
 class GesteDeProtectionForm extends StatefulWidget {
   final String typeUrgence;
 
-  const GesteDeProtectionForm({Key? key, required this.typeUrgence}) : super(key: key);
+  const GesteDeProtectionForm({super.key, required this.typeUrgence});
 
   @override
-  _GesteDeProtectionFormState createState() => _GesteDeProtectionFormState();
+  State<GesteDeProtectionForm> createState() => _GesteDeProtectionFormState();
 }
 
 class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
@@ -48,7 +48,7 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Geste de protection soumis avec succès!')),
+          const SnackBar(content: Text('Geste de protection soumis avec succès!')),
         );
 
         // Réinitialiser le formulaire
@@ -69,7 +69,7 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Veuillez remplir tous les champs et sélectionner une image.')),
+        const SnackBar(content: Text('Veuillez remplir tous les champs et sélectionner une image.')),
       );
     }
   }
@@ -77,7 +77,7 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Geste de Protection')),
+      appBar: AppBar(title: const Text('Geste de Protection')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -85,7 +85,7 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Titre'),
+                decoration: const InputDecoration(labelText: 'Titre'),
                 onChanged: (value) {
                   titre = value;
                 },
@@ -97,7 +97,7 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
                 onChanged: (value) {
                   description = value;
                 },
@@ -108,19 +108,19 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _pickImage,
-                child: Text('Sélectionner une image'),
+                child: const Text('Sélectionner une image'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               if (image != null) Text('Image sélectionnée: ${image!.name}'),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               isLoading
-                  ? CircularProgressIndicator() // Indicateur de chargement
+                  ? const CircularProgressIndicator() // Indicateur de chargement
                   : ElevatedButton(
                       onPressed: _submitForm,
-                      child: Text('Valider'),
+                      child: const Text('Valider'),
                     ),
             ],
           ),

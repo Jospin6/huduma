@@ -13,7 +13,7 @@ class ExpansionTextWidget extends StatefulWidget {
   });
 
   @override
-  _ExpansionTextWidgetState createState() => _ExpansionTextWidgetState();
+  State<ExpansionTextWidget> createState() => _ExpansionTextWidgetState();
 }
 
 class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
@@ -41,7 +41,7 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
                   children: [
                     Text(
                       widget.titre,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black, // Changer la couleur pour plus de contraste
                         fontSize: 16, // Augmenter la taille pour une meilleure visibilité
                         fontWeight: FontWeight.bold, // Mettre en gras pour le titre
@@ -68,7 +68,7 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
             child: _isExpanded
                 ? Text(
                     widget.description,
-                    style: TextStyle(fontSize: 14), // Style pour la description
+                    style: const TextStyle(fontSize: 14), // Style pour la description
                   )
                 : Container(), // Conteneur vide si non étendu
           ),

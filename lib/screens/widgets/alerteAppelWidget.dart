@@ -8,7 +8,7 @@ class AlerteAppelWidget extends StatelessWidget {
   final String userUID;
   final Map<String, dynamic> option;
 
-  AlerteAppelWidget({required this.userUID, required this.option});
+  const AlerteAppelWidget({super.key, required this.userUID, required this.option});
 
   @override
   Widget build(BuildContext context) {

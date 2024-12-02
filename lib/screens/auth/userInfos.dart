@@ -8,7 +8,7 @@ class UserInfos extends StatefulWidget {
   const UserInfos({super.key, required this.uid});
 
   @override
-  _UserInfosState createState() => _UserInfosState();
+  State<UserInfos> createState() => _UserInfosState();
 }
 
 class _UserInfosState extends State<UserInfos> {
@@ -28,12 +28,12 @@ class _UserInfosState extends State<UserInfos> {
         // Rediriger vers la page d'accueil
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } catch (e) {
         print(e); // Gérer les erreurs ici
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de la soumission du formulaire')),
+          const SnackBar(content: Text('Erreur lors de la soumission du formulaire')),
         );
       }
     }
@@ -42,7 +42,7 @@ class _UserInfosState extends State<UserInfos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Étape 2: Informations supplémentaires')),
+      appBar: AppBar(title: const Text('Informations supplémentaires')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -50,7 +50,7 @@ class _UserInfosState extends State<UserInfos> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Âge'),
+                decoration: const InputDecoration(labelText: 'Âge'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Veuillez entrer votre âge';
@@ -65,7 +65,7 @@ class _UserInfosState extends State<UserInfos> {
               ),
               DropdownButtonFormField<String>(
                 value: gender,
-                decoration: InputDecoration(labelText: 'Sexe'),
+                decoration: const InputDecoration(labelText: 'Sexe'),
                 items: <String>['Homme', 'Femme', 'Autre']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -79,10 +79,10 @@ class _UserInfosState extends State<UserInfos> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm, // Appeler la méthode de soumission
-                child: Text('Soumettre'),
+                child: const Text('Soumettre'),
               ),
             ],
           ),

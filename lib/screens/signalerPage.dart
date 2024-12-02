@@ -4,8 +4,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignalerPage extends StatefulWidget {
+  const SignalerPage({super.key});
+
   @override
-  _SignalerPageState createState() => _SignalerPageState();
+  State<SignalerPage> createState() => _SignalerPageState();
 }
 
 class _SignalerPageState extends State<SignalerPage> {
@@ -38,8 +40,8 @@ class _SignalerPageState extends State<SignalerPage> {
   ];
 
   Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    photo = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    photo = await picker.pickImage(source: ImageSource.gallery);
     setState(() {});
   }
 
@@ -69,7 +71,7 @@ class _SignalerPageState extends State<SignalerPage> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Signalement soumis avec succès!')),
+          const SnackBar(content: Text('Signalement soumis avec succès!')),
         );
 
         // Réinitialiser le formulaire ou naviguer ailleurs si nécessaire
@@ -102,7 +104,7 @@ class _SignalerPageState extends State<SignalerPage> {
         child: Column(
           children: [
             DropdownButtonFormField<String>(
-              decoration: InputDecoration(labelText: 'Type de signalement'),
+              decoration: const InputDecoration(labelText: 'Type de signalement'),
               value: signalementType,
               items: signalementTypes.map((String type) {
                 return DropdownMenuItem<String>(
@@ -123,7 +125,7 @@ class _SignalerPageState extends State<SignalerPage> {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Lieu'),
+              decoration: const InputDecoration(labelText: 'Lieu'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Veuillez entrer le lieu';
@@ -137,7 +139,7 @@ class _SignalerPageState extends State<SignalerPage> {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Ville'),
+              decoration: const InputDecoration(labelText: 'Ville'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Veuillez entrer la ville';
@@ -151,7 +153,7 @@ class _SignalerPageState extends State<SignalerPage> {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Description'),
               maxLines: 3,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -165,18 +167,18 @@ class _SignalerPageState extends State<SignalerPage> {
                 });
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _pickImage,
-              child: Text('Ajouter une photo'),
+              child: const Text('Ajouter une photo'),
             ),
             if (photo != null) Text('Photo sélectionnée: ${photo!.name}'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: isLoading ? null : _submitForm, // Désactiver le bouton pendant le chargement
               child: isLoading
-                  ? CircularProgressIndicator() // Indicateur de chargement sur le bouton
-                  : Text('Soumettre le signalement'),
+                  ? const CircularProgressIndicator() // Indicateur de chargement sur le bouton
+                  : const Text('Soumettre le signalement'),
             ),
           ],
         ),

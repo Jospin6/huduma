@@ -109,7 +109,7 @@ class _AlertePageState extends State<AlertePage> {
                               );
                             },
                           ),
-                          Container(
+                          SizedBox(
                             height: 200,
                             width: double.infinity,
                             child: GoogleMap(
@@ -122,7 +122,7 @@ class _AlertePageState extends State<AlertePage> {
                               ),
                               markers: {
                                 Marker(
-                                  markerId: MarkerId('alertLocation'),
+                                  markerId: const MarkerId('alertLocation'),
                                   position: LatLng(
                                     location['latitude'],
                                     location['longitude'],

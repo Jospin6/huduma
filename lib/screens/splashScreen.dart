@@ -54,14 +54,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircularProgressIndicator(), // Indicateur de chargement
-            const SizedBox(height: 20),
-            const Text('Chargement...', style: TextStyle(fontSize: 16)),
+            CircularProgressIndicator(), // Indicateur de chargement
+            SizedBox(height: 20),
+            Text('Chargement...', style: TextStyle(fontSize: 16)),
           ],
         ),
       ),

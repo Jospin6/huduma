@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:huduma/myApp.dart';
 import 'package:huduma/screens/auth/userInfos.dart';
 import 'package:huduma/utils/user_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +10,7 @@ class SignIn extends StatefulWidget {
   const SignIn({super.key});
 
   @override
-  _SignInState createState() => _SignInState();
+  State<SignIn> createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
@@ -33,7 +34,7 @@ class _SignInState extends State<SignIn> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => const UserInfos(uid: '')), // Placeholder
+            builder: (context) => const MyApp()), // Placeholder
       );
     }
   }
@@ -84,7 +85,7 @@ class _SignInState extends State<SignIn> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Nom'),
+                decoration: const InputDecoration(labelText: 'Nom'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Veuillez entrer votre nom';
@@ -98,7 +99,7 @@ class _SignInState extends State<SignIn> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Post-nom'),
+                decoration: const InputDecoration(labelText: 'Post-nom'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Veuillez entrer votre post-nom';
@@ -112,7 +113,7 @@ class _SignInState extends State<SignIn> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Numéro de téléphone'),
+                decoration: const InputDecoration(labelText: 'Numéro de téléphone'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Veuillez entrer votre numéro de téléphone';
@@ -125,14 +126,14 @@ class _SignInState extends State<SignIn> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _registerUser(); // Appeler la méthode d'enregistrement
                   }
                 },
-                child: Text('Continuer'),
+                child: const Text('Continuer'),
               ),
             ],
           ),

@@ -13,7 +13,7 @@ class ContactsPage extends StatefulWidget {
   const ContactsPage({super.key});
 
   @override
-  _ContactsPageState createState() => _ContactsPageState();
+  State<ContactsPage> createState() => _ContactsPageState();
 }
 
 class _ContactsPageState extends State<ContactsPage> {
@@ -48,7 +48,7 @@ class _ContactsPageState extends State<ContactsPage> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Veuillez remplir tous les champs.')),
+        const SnackBar(content: Text('Veuillez remplir tous les champs.')),
       );
     }
   }
@@ -64,7 +64,7 @@ class _ContactsPageState extends State<ContactsPage> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: Colors.white,
           elevation: 5,
-          title: Text('Ajouter un Contact'),
+          title: const Text('Ajouter un Contact'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -72,13 +72,13 @@ class _ContactsPageState extends State<ContactsPage> {
                 onChanged: (value) {
                   name = value;
                 },
-                decoration: InputDecoration(labelText: 'Nom'),
+                decoration: const InputDecoration(labelText: 'Nom'),
               ),
               TextField(
                 onChanged: (value) {
                   phone = value;
                 },
-                decoration: InputDecoration(labelText: 'Numéro de téléphone'),
+                decoration: const InputDecoration(labelText: 'Numéro de téléphone'),
                 keyboardType: TextInputType.phone,
               ),
             ],
@@ -88,7 +88,7 @@ class _ContactsPageState extends State<ContactsPage> {
               onPressed: () {
                 _addContact(name, phone);
               },
-              child: Text('Ajouter'),
+              child: const Text('Ajouter'),
             ),
           ],
         );
@@ -99,19 +99,19 @@ class _ContactsPageState extends State<ContactsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Contacts')),
+      appBar: AppBar(title: const Text('Contacts')),
       body: Column(
         children: [
           ElevatedButton(
             onPressed: _showAddContactDialog,
-            child: Text('Ajouter Contact'),
+            child: const Text('Ajouter Contact'),
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: _firestore.collection('contacts').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 final contacts = snapshot.data!.docs.map((doc) {
@@ -137,7 +137,7 @@ class _ContactsPageState extends State<ContactsPage> {
                         ),
                         child: Text(
                           contact.name[0].toUpperCase(),
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                       title: Text(contact.name),

@@ -35,7 +35,7 @@ class _InfosPageState extends State<InfosPage> {
     } catch (e) {
       print('Erreur lors de la récupération des signalements: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la récupération des signalements.')),
+        const SnackBar(content: Text('Erreur lors de la récupération des signalements.')),
       );
     } finally {
       setState(() {
@@ -80,7 +80,7 @@ class _InfosPageState extends State<InfosPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Lieu: ',
                                   style: TextStyle(color: Colors.grey),
                                 ),
@@ -90,7 +90,7 @@ class _InfosPageState extends State<InfosPage> {
                                 ),
                                 const SizedBox(height: 5), // Espacement
 
-                                Text(
+                                const Text(
                                   'Ville: ',
                                   style: TextStyle(color: Colors.grey),
                                 ),
@@ -100,7 +100,7 @@ class _InfosPageState extends State<InfosPage> {
                                 ),
                                 const SizedBox(height: 5), // Espacement
 
-                                Text(
+                                const Text(
                                   'Description: ',
                                   style: TextStyle(color: Colors.grey),
                                 ),

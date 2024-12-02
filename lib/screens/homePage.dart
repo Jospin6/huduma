@@ -9,7 +9,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print('Erreur lors de la récupération de l\'UID: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la récupération de l\'UID.')),
+        const SnackBar(content: Text('Erreur lors de la récupération de l\'UID.')),
       );
     } finally {
       setState(() {
@@ -54,11 +54,11 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: isLoading
-                ? Center(child: CircularProgressIndicator()) // Indicateur de chargement
+                ? const Center(child: CircularProgressIndicator()) // Indicateur de chargement
                 : ListView.builder(
                     itemCount: emergencyOptions.length,
                     shrinkWrap: true, // Pour éviter les erreurs de taille
-                    physics: NeverScrollableScrollPhysics(), // Désactiver le défilement
+                    physics: const NeverScrollableScrollPhysics(), // Désactiver le défilement
                     itemBuilder: (context, index) {
                       final option = emergencyOptions[index];
                       return Container(
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                                 },
                                 child: Text(
                                   option['title']!,
-                                  style: TextStyle(color: Colors.white, fontSize: 18), // Amélioration de l'accessibilité
+                                  style: const TextStyle(color: Colors.white, fontSize: 18), // Amélioration de l'accessibilité
                                 ),
                               ),
                             ),

@@ -11,7 +11,7 @@ class DetailPage extends StatefulWidget {
   const DetailPage(this.emergencyDetail, {super.key});
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {

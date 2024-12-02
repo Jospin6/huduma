@@ -54,8 +54,8 @@ class _MyAppState extends State<MyApp> {
         body: [
           const HomePage(),
           const MessageriePage(),
-          SignalerPage(),
-          NotificationsPage(),
+          const SignalerPage(),
+          const NotificationsPage(),
           const InfosPage()
         ][_currentIndex],
         bottomNavigationBar: BottomNavigationBar(

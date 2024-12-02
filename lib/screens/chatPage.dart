@@ -19,7 +19,7 @@ class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.option});
 
   @override
-  _ChatPageState createState() => _ChatPageState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
@@ -134,8 +134,8 @@ class _ChatPageState extends State<ChatPage> {
                         : CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        padding: EdgeInsets.all(10),
+                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: messages[index].isUser
                               ? Colors.blueAccent
@@ -172,7 +172,7 @@ class _ChatPageState extends State<ChatPage> {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.add_a_photo),
+                  icon: const Icon(Icons.add_a_photo),
                   onPressed: _pickImage,
                 ),
                 Expanded(
@@ -190,15 +190,15 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () => _sendMessage(),
                 ),
               ],
             ),
           ),
           if (isLoading) // Indicateur de chargement pendant le téléchargement de l'image
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: CircularProgressIndicator(),
             ),
         ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationsPage extends StatelessWidget {
-  NotificationsPage({super.key});
+  const NotificationsPage({super.key});
 
   Future<List<Map<String, dynamic>>> _fetchNotifications() async {
     try {
@@ -26,13 +26,13 @@ class NotificationsPage extends StatelessWidget {
         future: _fetchNotifications(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircularProgressIndicator(),
-                  const SizedBox(height: 16),
-                  const Text('Chargement des notifications...'),
+                  SizedBox(height: 16),
+                  Text('Chargement des notifications...'),
                 ],
               ),
             );
@@ -41,7 +41,7 @@ class NotificationsPage extends StatelessWidget {
               child: Text('Erreur lors du chargement des notifications: ${snapshot.error}'),
             );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: const Text('Aucune notification disponible.'));
+            return const Center(child: Text('Aucune notification disponible.'));
           }
 
           final notifications = snapshot.data!;
@@ -55,7 +55,7 @@ class NotificationsPage extends StatelessWidget {
 
               return ListTile(
                 leading: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.blueAccent,
                   ),
