@@ -31,7 +31,8 @@ class UserPreferences {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.getBool(isUserRegisteredKey) ?? false;
     } catch (e) {
-      print('Erreur lors de la vérification de l\'enregistrement de l\'utilisateur: $e');
+      print(
+          'Erreur lors de la vérification de l\'enregistrement de l\'utilisateur: $e');
       return false;
     }
   }
