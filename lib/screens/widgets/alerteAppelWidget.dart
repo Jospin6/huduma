@@ -12,8 +12,8 @@ class AlerteAppelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
+    return  InkWell(
+      onTap: () async {
         final phoneNumber = option['num_tele'] ?? '';
         final Uri launchUri = Uri(
           scheme: 'tel',
@@ -48,7 +48,15 @@ class AlerteAppelWidget extends StatelessWidget {
           print('Erreur: $e');
         }
       },
-      child: const Text('Appeler'),
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.green
+        ),
+        child: const Icon(Icons.phone, color: Colors.white,),
+      ),
     );
   }
 

@@ -32,30 +32,31 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _fetchGesteProtection() async {
-    try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('geste_protection')
-          .where('titre', isEqualTo: widget.emergencyDetail['title'])
-          .get();
+  try {
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('geste_protection')
+        .where('titre', isEqualTo: widget.emergencyDetail['title'])
+        .get();
 
-      List<Map<String, dynamic>> tempGestes = [];
-      for (var doc in snapshot.docs) {
-        tempGestes.add(doc.data() as Map<String, dynamic>);
-      }
-
-      setState(() {
-        gestesProtection = tempGestes;
-        isLoading = false; // Fin du chargement
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false; // Fin du chargement même en cas d'erreur
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la récupération des gestes: $e')),
-      );
+    List<Map<String, dynamic>> tempGestes = [];
+    for (var doc in snapshot.docs) {
+      tempGestes.add(doc.data() as Map<String, dynamic>);
     }
+
+    setState(() {
+      gestesProtection = tempGestes;
+      isLoading = false;
+    });
+  } catch (e) {
+    print('Erreur lors de la récupération des gestes: $e');
+    setState(() {
+      isLoading = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Erreur lors de la récupération des gestes: $e')),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {

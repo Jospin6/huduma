@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:huduma/screens/alerteHistoryPage.dart';
+import 'package:huduma/screens/contactsPage.dart';
 import 'package:huduma/screens/homePage.dart';
 import 'package:huduma/screens/infosPage.dart';
 import 'package:huduma/screens/messageriePage.dart';
@@ -48,7 +49,16 @@ class _MyAppState extends State<MyApp> {
                             builder: (context) => const AlertHistoryPage()),
                       )
                     },
-                icon: const Icon(Icons.alarm))
+                icon: const Icon(Icons.alarm)),
+            IconButton(
+                onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ContactsPage()),
+                      )
+                    },
+                icon: const Icon(Icons.contact_emergency))
           ],
         ),
         body: [

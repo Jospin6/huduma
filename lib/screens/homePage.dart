@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:huduma/screens/contactsPage.dart';
 import 'package:huduma/screens/detailPage.dart';
 import 'package:huduma/screens/widgets/alerteAppelWidget.dart';
 import 'package:huduma/utils/emergency_options.dart';
@@ -42,15 +41,6 @@ class _HomePageState extends State<HomePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ContactsPage()),
-              );
-            },
-            child: const Text('Alertes'),
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: isLoading
