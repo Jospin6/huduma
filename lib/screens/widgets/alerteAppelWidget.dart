@@ -5,14 +5,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 
 class AlerteAppelWidget extends StatelessWidget {
-  final String userUID;
+  final String? userUID;
   final Map<String, dynamic> option;
 
-  const AlerteAppelWidget({super.key, required this.userUID, required this.option});
+  const AlerteAppelWidget({super.key, this.userUID, required this.option});
 
   @override
   Widget build(BuildContext context) {
-    return  InkWell(
+    return InkWell(
       onTap: () async {
         final phoneNumber = option['num_tele'] ?? '';
         final Uri launchUri = Uri(
@@ -31,7 +31,7 @@ class AlerteAppelWidget extends StatelessWidget {
           Position position = await _getUserLocation();
 
           // Récupérer le nom de l'utilisateur
-          String userName = await _getUserName(userUID);
+          String userName = await _getUserName(userUID!);
 
           for (var contact in contacts) {
             await _sendSms(contact['phone'], position, userName);

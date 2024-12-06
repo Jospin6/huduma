@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
 class GesteDeProtectionForm extends StatefulWidget {
-  final String typeUrgence;
+  final String? typeUrgence;
 
   const GesteDeProtectionForm({super.key, required this.typeUrgence});
 

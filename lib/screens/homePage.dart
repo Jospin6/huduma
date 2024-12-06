@@ -26,16 +26,13 @@ class _HomePageState extends State<HomePage> {
       userUID = await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
     } catch (e) {
       print('Erreur lors de la récupération de l\'UID: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erreur lors de la récupération de l\'UID.')),
-      );
     } finally {
       setState(() {
         isLoading = false; // Fin du chargement
       });
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -79,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => DetailPage(option),
+                                      builder: (context) => DetailPage(emergencyDetail: {...option}),
                                     ),
                                   );
                                 },

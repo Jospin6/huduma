@@ -8,7 +8,7 @@ import 'package:huduma/utils/user_preferences.dart';
 class DetailPage extends StatefulWidget {
   final Map<String, String> emergencyDetail;
 
-  const DetailPage(this.emergencyDetail, {super.key});
+  const DetailPage({super.key, required this.emergencyDetail});
 
   @override
   State<DetailPage> createState() => _DetailPageState();

@@ -28,33 +28,40 @@ class _SplashScreenState extends State<SplashScreen> {
       await Future.delayed(const Duration(seconds: 2));
 
       // Naviguer vers la bonne page
-      if (userUID != null) {
+      if (userUID == null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const SignIn()), 
+          MaterialPageRoute(builder: (context) => const SignIn()),
         );
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MyApp()), 
+          MaterialPageRoute(builder: (context) => const MyApp()),
         );
       }
     } catch (e) {
       // Gestion des erreurs
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la récupération des données: $e')),
-      );
-      // Naviguer vers la page principale en cas d'erreur
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MyApp()), 
+        MaterialPageRoute(builder: (context) {
+          return Builder(
+            builder: (context) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content:
+                        Text('Erreur lors de la récupération des données: $e')),
+              );
+              return const SignIn(); // Ou une autre page
+            },
+          );
+        }),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

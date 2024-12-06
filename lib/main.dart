@@ -7,12 +7,22 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MaterialApp(
-    title: 'Huduma',
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      useMaterial3: true,
-    ),
-    home: const SplashScreen(),
-  ));
+  runApp(const MyPrincipalApp());
+}
+
+class MyPrincipalApp extends StatelessWidget {
+  const MyPrincipalApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Huduma',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 80, 37, 153)),
+        useMaterial3: true,
+      ),
+      home: const SplashScreen(),
+    );
+  }
 }

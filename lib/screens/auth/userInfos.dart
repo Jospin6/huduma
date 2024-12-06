@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:huduma/screens/homePage.dart';
+import 'package:huduma/myApp.dart';
 
 class UserInfos extends StatefulWidget {
   final String uid;
@@ -28,7 +28,7 @@ class _UserInfosState extends State<UserInfos> {
         // Rediriger vers la page d'accueil
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const MyApp()),
         );
       } catch (e) {
         print(e); // Gérer les erreurs ici
