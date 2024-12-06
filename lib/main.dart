@@ -7,5 +7,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const SplashScreen());
+  runApp(MaterialApp(
+    title: 'Huduma',
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      useMaterial3: true,
+    ),
+    home: const SplashScreen(),
+  ));
 }
