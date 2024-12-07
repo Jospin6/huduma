@@ -97,14 +97,15 @@ class _AlertePageState extends State<AlertePage> {
                           ListTile(
                             title: Text(alert['title']),
                             subtitle: Text(
-                              'Utilisateur : $userName\nDate : ${DateFormat('dd/MM/yyyy HH:mm').format(alert['date'].toDate())}', // Formatage de la date
+                              'Utilisateur : $userName\nDate : ${DateFormat('dd/MM/yyyy HH:mm').format(alert['date'].toDate())}',
+                              style: const TextStyle(color: Colors.white), // Formatage de la date
                             ),
-                            leading: const Icon(Icons.notifications),
-                            trailing: const Icon(Icons.arrow_forward),
+                            leading: const Icon(Icons.notifications, color: Colors.white,),
+                            trailing: const Icon(Icons.arrow_forward, color: Colors.white,),
                             onTap: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Vous avez cliqué sur ${alert['title']}'),
+                                  content: Text('Vous avez cliqué sur ${alert['title']}', style: const TextStyle(color: Colors.white),),
                                 ),
                               );
                             },
