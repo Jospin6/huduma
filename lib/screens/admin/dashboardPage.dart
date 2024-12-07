@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
+
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
@@ -22,12 +24,12 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text('Ajouter une Alerte'),
+          title: const Text('Ajouter une Alerte'),
           content: TextField(
             onChanged: (value) {
               alertText = value;
             },
-            decoration: InputDecoration(labelText: 'Description de l\'alerte'),
+            decoration: const InputDecoration(labelText: 'Description de l\'alerte'),
           ),
           actions: [
             TextButton(
@@ -37,7 +39,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   Navigator.of(context).pop(); // Ferme le popup après ajout
                 }
               },
-              child: Text('Ajouter'),
+              child: const Text('Ajouter'),
             ),
           ],
         );
@@ -49,7 +51,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard d\'Urgence'),
+        title: const Text('Dashboard d\'Urgence'),
         backgroundColor: Colors.redAccent,
       ),
       body: Padding(
@@ -57,11 +59,11 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Column(
           children: [
             // Titre principal
-            Text(
+            const Text(
               'Bienvenue dans votre Dashboard',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Cartes d'alertes
             Row(
@@ -71,19 +73,19 @@ class _DashboardPageState extends State<DashboardPage> {
                 _buildAlertCard('Alertes Résolues', '0', Colors.green), // Placeholder pour les alertes résolues
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Bouton pour ajouter une alerte
             ElevatedButton(
               onPressed: _showAddAlertDialog,
-              child: Text('Ajouter une Alerte'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                textStyle: TextStyle(fontSize: 18),
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                textStyle: const TextStyle(fontSize: 18),
               ),
+              child: Text('Ajouter une Alerte'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Liste des alertes
             Expanded(
@@ -114,9 +116,9 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             Text(
               title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               count,
               style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: color),
@@ -130,11 +132,11 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildAlertTile(String title, String description) {
     return Card(
       elevation: 3,
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: ListTile(
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(description),
-        trailing: Icon(Icons.arrow_forward),
+        trailing: const Icon(Icons.arrow_forward),
       ),
     );
   }

@@ -57,14 +57,14 @@ class _UtilisateursPageState extends State<UtilisateursPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Modifier l\'urgence'),
+          title: const Text('Modifier l\'urgence'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Veuillez choisir une urgence :'),
+              const Text('Veuillez choisir une urgence :'),
               DropdownButton<String>(
                 value: selectedUrgence,
-                hint: Text('Sélectionner une urgence'),
+                hint: const Text('Sélectionner une urgence'),
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedUrgence = newValue;
@@ -92,18 +92,18 @@ class _UtilisateursPageState extends State<UtilisateursPage> {
                 } else {
                   // Afficher un message d'erreur si aucune urgence n'est sélectionnée
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                         content: Text('Veuillez sélectionner une urgence')),
                   );
                 }
               },
-              child: Text('Valider'),
+              child: const Text('Valider'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Annuler'),
+              child: const Text('Annuler'),
             ),
           ],
         );
@@ -117,13 +117,13 @@ class _UtilisateursPageState extends State<UtilisateursPage> {
       appBar: AppBar(
         title: const Text('Utilisateurs'),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
+          preferredSize: const Size.fromHeight(50.0),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _searchController,
               onChanged: _filterUsers,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Rechercher par nom',
                 border: OutlineInputBorder(),
                 filled: true,

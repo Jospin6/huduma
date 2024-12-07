@@ -25,15 +25,15 @@ class _InformationsFormState extends State<InformationsForm> {
   ];
 
   Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    photo = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    photo = await picker.pickImage(source: ImageSource.gallery);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Formulaire d\'Informations')),
+      appBar: AppBar(title: const Text('Formulaire d\'Informations')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -41,7 +41,7 @@ class _InformationsFormState extends State<InformationsForm> {
           child: Column(
             children: [
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(labelText: 'Type d\'incident'),
+                decoration: const InputDecoration(labelText: 'Type d\'incident'),
                 value: incidentType,
                 items: incidentTypes.map((String type) {
                   return DropdownMenuItem<String>(
@@ -62,7 +62,7 @@ class _InformationsFormState extends State<InformationsForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Titre'),
+                decoration: const InputDecoration(labelText: 'Titre'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Veuillez entrer un titre';
@@ -76,7 +76,7 @@ class _InformationsFormState extends State<InformationsForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Contenu'),
+                decoration: const InputDecoration(labelText: 'Contenu'),
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -90,24 +90,24 @@ class _InformationsFormState extends State<InformationsForm> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _pickImage,
-                child: Text('Ajouter une photo'),
+                child: const Text('Ajouter une photo'),
               ),
               if (photo != null) 
                 Text('Photo sélectionnée: ${photo!.name}'),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     // Logique pour soumettre le formulaire
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Informations soumises avec succès!')),
+                      const SnackBar(content: Text('Informations soumises avec succès!')),
                     );
                   }
                 },
-                child: Text('Soumettre'),
+                child: const Text('Soumettre'),
               ),
             ],
           ),

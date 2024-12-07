@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:huduma/screens/alertePage.dart';
 import 'package:huduma/screens/widgets/alerteAppelWidget.dart';
-import 'package:huduma/screens/widgets/expansionTextWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:huduma/screens/widgets/expansionTextWidget.dart';
 import 'package:huduma/utils/user_preferences.dart';
 
 class DetailPage extends StatefulWidget {
-  final Map<String, String> emergencyDetail;
+  final Map<String, String> option;
 
-  const DetailPage({super.key, required this.emergencyDetail});
+  const DetailPage({super.key, required this.option});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -32,37 +32,41 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _fetchGesteProtection() async {
-  try {
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('geste_protection')
-        .where('titre', isEqualTo: widget.emergencyDetail['title'])
-        .get();
+    try {
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('geste_protection')
+          .where('titre', isEqualTo: widget.option['title'])
+          .get();
 
-    List<Map<String, dynamic>> tempGestes = [];
-    for (var doc in snapshot.docs) {
-      tempGestes.add(doc.data() as Map<String, dynamic>);
+      List<Map<String, dynamic>> tempGestes = [];
+      for (var doc in snapshot.docs) {
+        tempGestes.add(doc.data() as Map<String, dynamic>);
+      }
+
+      setState(() {
+        gestesProtection = tempGestes;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Erreur lors de la récupération des gestes: $e');
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la récupération des gestes: $e')),
+      );
     }
-
-    setState(() {
-      gestesProtection = tempGestes;
-      isLoading = false;
-    });
-  } catch (e) {
-    print('Erreur lors de la récupération des gestes: $e');
-    setState(() {
-      isLoading = false;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Erreur lors de la récupération des gestes: $e')),
-    );
   }
-}
 
   @override
   Widget build(BuildContext context) {
+    // Vérifiez les valeurs nulles pour 'title' et 'image'
+    String title = widget.option['title'] ?? 'Titre inconu';
+    String image = widget.option['image'] ?? 'assets/images/viol.png';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.emergencyDetail['title']!),
+        title: Text(title),
       ),
       body: SizedBox(
         width: double.infinity,
@@ -74,7 +78,7 @@ class _DetailPageState extends State<DetailPage> {
               height: 300,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(widget.emergencyDetail['image']!),
+                  image: AssetImage(image),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -90,7 +94,7 @@ class _DetailPageState extends State<DetailPage> {
                         },
                       ),
                       Text(
-                        widget.emergencyDetail['title']!,
+                        title,
                         style: const TextStyle(fontSize: 20),
                       ),
                     ],
@@ -102,20 +106,22 @@ class _DetailPageState extends State<DetailPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AlertePage(
-                                    title: widget.emergencyDetail['title']!)),
+                                builder: (context) => AlertePage(title: title)),
                           );
                         },
                         child: const Text('Alertes'),
                       ),
                       AlerteAppelWidget(
-                          userUID: userUID!, option: widget.emergencyDetail),
+                        userUID: userUID ?? 'UID par défaut', // Gestion de userUID
+                        option: widget.option,
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
             Positioned(
+              top: 250,
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
@@ -128,13 +134,6 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        widget.emergencyDetail['details']!,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ),
                     // Indicateur de chargement
                     if (isLoading)
                       const Center(child: CircularProgressIndicator()),

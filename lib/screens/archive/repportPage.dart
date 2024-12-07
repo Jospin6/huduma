@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 
 
 class ReportPage extends StatefulWidget {
+  const ReportPage({super.key});
+
   @override
   _ReportPageState createState() => _ReportPageState();
 }
@@ -26,7 +28,7 @@ class _ReportPageState extends State<ReportPage> {
     'Autre',
   ];
 
-  List<XFile>? _imageFiles = []; // Liste pour stocker les images
+  final List<XFile>? _imageFiles = []; // Liste pour stocker les images
 
   void updateSuggestions(String input) {
     if (input.isEmpty) {
@@ -42,30 +44,28 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   Future<void> _pickImages() async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile>? pickedFiles = await _picker.pickMultiImage(); // Choisir plusieurs images
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> pickedFiles = await picker.pickMultiImage(); // Choisir plusieurs images
 
-    if (pickedFiles != null) {
-      setState(() {
-        _imageFiles!.addAll(pickedFiles); // Ajouter les images à la liste
-      });
+    setState(() {
+      _imageFiles!.addAll(pickedFiles); // Ajouter les images à la liste
+    });
     }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Faire un Signalement'),
+        title: const Text('Faire un Signalement'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Type d\'urgence:', style: TextStyle(fontSize: 18)),
+            const Text('Type d\'urgence:', style: TextStyle(fontSize: 18)),
             DropdownButton<String>(
-              hint: Text('Sélectionnez un type'),
+              hint: const Text('Sélectionnez un type'),
               value: selectedType,
               onChanged: (String? newValue) {
                 setState(() {
@@ -106,17 +106,17 @@ class _ReportPageState extends State<ReportPage> {
                 );
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _pickImages,
-              child: Text('Ajouter des Photos'),
+              child: const Text('Ajouter des Photos'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // Affichage des images sélectionnées
-            _imageFiles != null && _imageFiles!.isNotEmpty
+            _imageFiles != null && _imageFiles.isNotEmpty
               ? Wrap(
                   spacing: 8.0,
-                  children: _imageFiles!.map((image) {
+                  children: _imageFiles.map((image) {
                     return Image.file(
                       File(image.path),
                       width: 100,
@@ -126,7 +126,7 @@ class _ReportPageState extends State<ReportPage> {
                   }).toList(),
                 )
               : Container(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 String location = locationController.text;
@@ -135,7 +135,7 @@ class _ReportPageState extends State<ReportPage> {
                 // Retourner à la page précédente
                 Navigator.pop(context);
               },
-              child: Text('Envoyer le Signalement'),
+              child: const Text('Envoyer le Signalement'),
             ),
           ],
         ),
