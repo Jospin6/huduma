@@ -14,7 +14,7 @@ class _MessageriePageState extends State<MessageriePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Options d\'Urgence'),
+        title: const Text('Options d\'Urgence', style: TextStyle(color: Colors.white),),
       ),
       body: emergencyOptions.isEmpty
           ? const Center(child: CircularProgressIndicator()) // Indicateur de chargement si la liste est vide
@@ -30,8 +30,8 @@ class _MessageriePageState extends State<MessageriePage> {
                         : null, // Gestion de l'image
                     backgroundColor: Colors.grey, // Couleur de fond par défaut
                   ),
-                  title: Text(option['title'] ?? 'Titre inconnu'),
-                  subtitle: Text(option['num_tele'] ?? 'Numéro inconnu'),
+                  title: Text(option['title'] ?? 'Titre inconnu', style: const TextStyle(color: Colors.white),),
+                  subtitle: Text(option['num_tele'] ?? 'Numéro inconnu', style: const TextStyle(color: Colors.white),),
                   onTap: () {
                     Navigator.push(
                       context,

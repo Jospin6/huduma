@@ -75,7 +75,7 @@ class _AlertePageState extends State<AlertePage> {
                 ),
               );
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.add, color: Colors.white,),
           ),
         ],
       ),

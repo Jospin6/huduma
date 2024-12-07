@@ -64,12 +64,12 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
           isLoading = false; // Fin du chargement en cas d'erreur
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de la soumission: $e')),
+          SnackBar(content: Text('Erreur lors de la soumission: $e', style: const TextStyle(color: Colors.white),)),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez remplir tous les champs et sélectionner une image.')),
+        const SnackBar(content: Text('Veuillez remplir tous les champs et sélectionner une image.', style: TextStyle(color: Colors.white),)),
       );
     }
   }
@@ -77,7 +77,7 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Geste de Protection')),
+      appBar: AppBar(title: const Text('Geste de Protection', style: TextStyle(color: Colors.white),)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -111,16 +111,16 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _pickImage,
-                child: const Text('Sélectionner une image'),
+                child: const Text('Sélectionner une image', style: TextStyle(color: Colors.white),),
               ),
               const SizedBox(height: 10),
-              if (image != null) Text('Image sélectionnée: ${image!.name}'),
+              if (image != null) Text('Image sélectionnée: ${image!.name}', style: const TextStyle(color: Colors.white),),
               const SizedBox(height: 16),
               isLoading
                   ? const CircularProgressIndicator() // Indicateur de chargement
                   : ElevatedButton(
                       onPressed: _submitForm,
-                      child: const Text('Valider'),
+                      child: const Text('Valider', style: TextStyle(color: Colors.white),),
                     ),
             ],
           ),

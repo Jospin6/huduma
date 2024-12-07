@@ -19,7 +19,9 @@ class MyPrincipalApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Huduma',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 80, 37, 153)),
+        brightness: Brightness.dark,
+        primaryColor: Colors.black,
+        scaffoldBackgroundColor: Colors.black,
         useMaterial3: true,
       ),
       home: const SplashScreen(),

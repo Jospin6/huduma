@@ -109,7 +109,7 @@ class _SignalerPageState extends State<SignalerPage> {
               items: signalementTypes.map((String type) {
                 return DropdownMenuItem<String>(
                   value: type,
-                  child: Text(type),
+                  child: Text(type, style: const TextStyle(color: Colors.white),),
                 );
               }).toList(),
               onChanged: (String? newValue) {
@@ -170,15 +170,15 @@ class _SignalerPageState extends State<SignalerPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _pickImage,
-              child: const Text('Ajouter une photo'),
+              child: const Text('Ajouter une photo', style: TextStyle(color: Colors.white),),
             ),
-            if (photo != null) Text('Photo sélectionnée: ${photo!.name}'),
+            if (photo != null) Text('Photo sélectionnée: ${photo!.name}', style: const TextStyle(color: Colors.white),),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: isLoading ? null : _submitForm, // Désactiver le bouton pendant le chargement
               child: isLoading
                   ? const CircularProgressIndicator() // Indicateur de chargement sur le bouton
-                  : const Text('Soumettre le signalement'),
+                  : const Text('Soumettre le signalement', style: TextStyle(color: Colors.white),),
             ),
           ],
         ),

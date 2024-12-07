@@ -68,7 +68,7 @@ class _SignInState extends State<SignIn> {
       } catch (e) {
         print(e); // Gérer les erreurs ici
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de l\'enregistrement: $e')),
+          SnackBar(content: Text('Erreur lors de l\'enregistrement: $e', style: const TextStyle(color: Colors.white),)),
         );
       }
     }
@@ -77,7 +77,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Enregistrer vos infos')),
+      appBar: AppBar(title: const Text('Enregistrer vos infos', style: TextStyle(color: Colors.white),)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -133,7 +133,7 @@ class _SignInState extends State<SignIn> {
                     _registerUser(); // Appeler la méthode d'enregistrement
                   }
                 },
-                child: const Text('Continuer'),
+                child: const Text('Continuer', style: TextStyle(color: Colors.white),),
               ),
             ],
           ),

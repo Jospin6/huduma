@@ -49,7 +49,7 @@ class _AlertHistoryPageState extends State<AlertHistoryPage> {
         isLoading = false; // Fin du chargement même en cas d'erreur
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la récupération des alertes: $e')),
+        SnackBar(content: Text('Erreur lors de la récupération des alertes: $e', style: const TextStyle(color: Colors.white),)),
       );
     }
   }
@@ -68,13 +68,13 @@ class _AlertHistoryPageState extends State<AlertHistoryPage> {
                   itemCount: alerts.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(alerts[index]['title']),
-                      subtitle: Text('Date: ${DateFormat('dd/MM/yyyy HH:mm').format(alerts[index]['date'].toDate())}'), // Formatage de la date
-                      leading: const Icon(Icons.notifications),
-                      trailing: const Icon(Icons.arrow_forward),
+                      title: Text(alerts[index]['title'], style: const TextStyle(color: Colors.white),),
+                      subtitle: Text('Date: ${DateFormat('dd/MM/yyyy HH:mm').format(alerts[index]['date'].toDate())}', style: const TextStyle(color: Colors.white),), // Formatage de la date
+                      leading: const Icon(Icons.notifications, color: Colors.white,),
+                      trailing: const Icon(Icons.arrow_forward, color: Colors.white),
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Vous avez cliqué sur ${alerts[index]['title']}')),
+                          SnackBar(content: Text('Vous avez cliqué sur ${alerts[index]['title']}', style: const TextStyle(color: Colors.white),)),
                         );
                       },
                     );

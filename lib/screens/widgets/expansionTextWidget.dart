@@ -42,7 +42,7 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
                     Text(
                       widget.titre,
                       style: const TextStyle(
-                        color: Colors.black, // Changer la couleur pour plus de contraste
+                        color: Colors.white, // Changer la couleur pour plus de contraste
                         fontSize: 16, // Augmenter la taille pour une meilleure visibilité
                         fontWeight: FontWeight.bold, // Mettre en gras pour le titre
                       ),
@@ -53,7 +53,7 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
               ),
               IconButton(
                 icon: Icon(
-                  _isExpanded ? Icons.expand_less : Icons.expand_more,
+                  _isExpanded ? Icons.expand_less : Icons.expand_more, color: Colors.white,
                 ),
                 onPressed: () {
                   setState(() {
@@ -68,7 +68,7 @@ class _ExpansionTextWidgetState extends State<ExpansionTextWidget> {
             child: _isExpanded
                 ? Text(
                     widget.description,
-                    style: const TextStyle(fontSize: 14), // Style pour la description
+                    style: const TextStyle(fontSize: 14, color: Colors.white), // Style pour la description
                   )
                 : Container(), // Conteneur vide si non étendu
           ),

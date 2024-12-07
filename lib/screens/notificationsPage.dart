@@ -20,7 +20,7 @@ class NotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: const Text('Notifications', style: TextStyle(color: Colors.white),),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _fetchNotifications(),
@@ -32,16 +32,16 @@ class NotificationsPage extends StatelessWidget {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(height: 16),
-                  Text('Chargement des notifications...'),
+                  Text('Chargement des notifications...', style: TextStyle(color: Colors.white),),
                 ],
               ),
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('Erreur lors du chargement des notifications: ${snapshot.error}'),
+              child: Text('Erreur lors du chargement des notifications: ${snapshot.error}', style: const TextStyle(color: Colors.white),),
             );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Aucune notification disponible.'));
+            return const Center(child: Text('Aucune notification disponible.', style: TextStyle(color: Colors.white),));
           }
 
           final notifications = snapshot.data!;
@@ -62,14 +62,14 @@ class NotificationsPage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     title.isNotEmpty ? title[0] : '?', // Première lettre du titre
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                    style: const TextStyle(color: Colors.white, fontSize: 20,),
                   ),
                 ),
-                title: Text(title),
-                subtitle: Text(content),
+                title: Text(title, style: const TextStyle(color: Colors.white),),
+                subtitle: Text(content, style: const TextStyle(color: Colors.white),),
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Vous avez cliqué sur $title')),
+                    SnackBar(content: Text('Vous avez cliqué sur $title', style: const TextStyle(color: Colors.white),)),
                   );
                 },
               );

@@ -33,7 +33,7 @@ class _UserInfosState extends State<UserInfos> {
       } catch (e) {
         print(e); // Gérer les erreurs ici
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erreur lors de la soumission du formulaire')),
+          const SnackBar(content: Text('Erreur lors de la soumission du formulaire', style: TextStyle(color: Colors.white),)),
         );
       }
     }
@@ -42,7 +42,7 @@ class _UserInfosState extends State<UserInfos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Informations supplémentaires')),
+      appBar: AppBar(title: const Text('Informations supplémentaires', style: TextStyle(color: Colors.white),)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -82,7 +82,7 @@ class _UserInfosState extends State<UserInfos> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm, // Appeler la méthode de soumission
-                child: const Text('Soumettre'),
+                child: const Text('Soumettre', style: TextStyle(color: Colors.white),),
               ),
             ],
           ),

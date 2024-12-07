@@ -53,7 +53,8 @@ class _DetailPageState extends State<DetailPage> {
         isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la récupération des gestes: $e')),
+        SnackBar(
+            content: Text('Erreur lors de la récupération des gestes: $e')),
       );
     }
   }
@@ -66,7 +67,7 @@ class _DetailPageState extends State<DetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title, style: const TextStyle(color: Colors.white),),
       ),
       body: SizedBox(
         width: double.infinity,
@@ -75,42 +76,26 @@ class _DetailPageState extends State<DetailPage> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 300,
+              height: 200,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(image),
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      Text(
-                        title,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
+                      IconButton(onPressed: (){
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AlertePage(title: title)),
                           );
-                        },
-                        child: const Text('Alertes'),
-                      ),
+                      }, icon: const Icon(Icons.alarm, color: Colors.red,)),
                       AlerteAppelWidget(
                         userUID: userUID ?? 'UID par défaut', // Gestion de userUID
                         option: widget.option,
@@ -121,7 +106,7 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             Positioned(
-              top: 250,
+              top: 150,
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
@@ -141,7 +126,7 @@ class _DetailPageState extends State<DetailPage> {
                     Expanded(
                       child: gestesProtection.isEmpty && !isLoading
                           ? const Center(
-                              child: Text('Aucun geste de protection trouvé.'))
+                              child: Text('Aucun geste de protection trouvé.', style: TextStyle(color: Colors.white),))
                           : ListView.builder(
                               itemCount: gestesProtection.length,
                               itemBuilder: (context, index) {

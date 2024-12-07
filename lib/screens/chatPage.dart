@@ -115,7 +115,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat d\'Urgence ${widget.option['title']}'),
+        title: Text('Chat d\'Urgence ${widget.option['title']}', style: const TextStyle(color: Colors.white),),
       ),
       body: Column(
         children: [
@@ -172,7 +172,7 @@ class _ChatPageState extends State<ChatPage> {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.add_a_photo),
+                  icon: const Icon(Icons.add_a_photo, color: Colors.grey,),
                   onPressed: _pickImage,
                 ),
                 Expanded(
@@ -190,7 +190,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send),
+                  icon: const Icon(Icons.send, color: Colors.grey,),
                   onPressed: () => _sendMessage(),
                 ),
               ],

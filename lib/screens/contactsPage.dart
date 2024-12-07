@@ -43,12 +43,12 @@ class _ContactsPageState extends State<ContactsPage> {
         Navigator.of(context).pop();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de l\'ajout du contact: $e')),
+          SnackBar(content: Text('Erreur lors de l\'ajout du contact: $e', style: const TextStyle(color: Colors.white),)),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez remplir tous les champs.')),
+        const SnackBar(content: Text('Veuillez remplir tous les champs.', style: TextStyle(color: Colors.white),)),
       );
     }
   }
@@ -62,9 +62,9 @@ class _ContactsPageState extends State<ContactsPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
           elevation: 5,
-          title: const Text('Ajouter un Contact'),
+          title: const Text('Ajouter un Contact', style: TextStyle(color: Colors.white),),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -88,7 +88,7 @@ class _ContactsPageState extends State<ContactsPage> {
               onPressed: () {
                 _addContact(name, phone);
               },
-              child: const Text('Ajouter'),
+              child: const Text('Ajouter', style: TextStyle(color: Colors.white),),
             ),
           ],
         );
@@ -99,12 +99,12 @@ class _ContactsPageState extends State<ContactsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Contacts')),
+      appBar: AppBar(title: const Text('Contacts', style: TextStyle(color: Colors.white),)),
       body: Column(
         children: [
           ElevatedButton(
             onPressed: _showAddContactDialog,
-            child: const Text('Ajouter Contact'),
+            child: const Text('Ajouter Contact', style: TextStyle(color: Colors.white),),
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -140,8 +140,8 @@ class _ContactsPageState extends State<ContactsPage> {
                           style: const TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
-                      title: Text(contact.name),
-                      subtitle: Text(contact.phone),
+                      title: Text(contact.name, style: const TextStyle(color: Colors.white),),
+                      subtitle: Text(contact.phone, style: const TextStyle(color: Colors.white),),
                     );
                   },
                 );

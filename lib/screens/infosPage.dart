@@ -48,12 +48,12 @@ class _InfosPageState extends State<InfosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Signalements'),
+        title: const Text('Signalements', style: TextStyle(color: Colors.white),),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator()) // Indicateur de chargement
           : signalements.isEmpty
-              ? const Center(child: Text('Aucun signalement trouvé.'))
+              ? const Center(child: Text('Aucun signalement trouvé.', style: TextStyle(color: Colors.white),))
               : ListView.builder(
                   itemCount: signalements.length,
                   itemBuilder: (context, index) {
@@ -72,7 +72,7 @@ class _InfosPageState extends State<InfosPage> {
                             // Titre de la Card
                             Text(
                               signalement['type'] ?? 'Type inconnu',
-                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                             const SizedBox(height: 10), // Espacement
 
@@ -86,7 +86,7 @@ class _InfosPageState extends State<InfosPage> {
                                 ),
                                 Text(
                                   signalement['lieu'] ?? 'Lieu inconnu',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                                 ),
                                 const SizedBox(height: 5), // Espacement
 
@@ -96,7 +96,7 @@ class _InfosPageState extends State<InfosPage> {
                                 ),
                                 Text(
                                   signalement['ville'] ?? 'Ville inconnue',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                                 ),
                                 const SizedBox(height: 5), // Espacement
 
@@ -106,7 +106,7 @@ class _InfosPageState extends State<InfosPage> {
                                 ),
                                 Text(
                                   signalement['description'] ?? 'Aucune description',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                                 ),
                               ],
                             ),
@@ -122,7 +122,7 @@ class _InfosPageState extends State<InfosPage> {
                                   height: 150, // Hauteur de l'image
                                   width: double.infinity, // Largeur de l'image
                                   errorBuilder: (context, error, stackTrace) {
-                                    return const Text('Erreur de chargement de l\'image.');
+                                    return const Text('Erreur de chargement de l\'image.', style: TextStyle(color: Colors.white),);
                                   },
                                 ),
                               ),

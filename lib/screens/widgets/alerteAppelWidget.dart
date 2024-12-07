@@ -49,8 +49,8 @@ class AlerteAppelWidget extends StatelessWidget {
         }
       },
       child: Container(
-        width: 50,
-        height: 50,
+        width: 30,
+        height: 30,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.green

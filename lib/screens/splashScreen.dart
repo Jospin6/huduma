@@ -68,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             CircularProgressIndicator(), // Indicateur de chargement
             SizedBox(height: 20),
-            Text('Chargement...', style: TextStyle(fontSize: 16)),
+            Text('Chargement...', style: TextStyle(fontSize: 16, color: Colors.white)),
           ],
         ),
       ),
