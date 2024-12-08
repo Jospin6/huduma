@@ -57,9 +57,6 @@ class _AlertHistoryPageState extends State<AlertHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Historique des Alertes'),
-      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator()) // Indicateur de chargement
           : alerts.isEmpty

@@ -47,9 +47,6 @@ class _InfosPageState extends State<InfosPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Signalements', style: TextStyle(color: Colors.white),),
-      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator()) // Indicateur de chargement
           : signalements.isEmpty

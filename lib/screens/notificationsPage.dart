@@ -19,9 +19,6 @@ class NotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications', style: TextStyle(color: Colors.white),),
-      ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _fetchNotifications(),
         builder: (context, snapshot) {
