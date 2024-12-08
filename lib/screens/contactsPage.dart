@@ -62,7 +62,7 @@ class _ContactsPageState extends State<ContactsPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: Colors.black,
+          backgroundColor: const Color.fromARGB(255, 26, 24, 24),
           elevation: 5,
           title: const Text('Ajouter un Contact', style: TextStyle(color: Colors.white),),
           content: Column(

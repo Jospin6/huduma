@@ -127,13 +127,17 @@ class _SignInState extends State<SignIn> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _registerUser(); // Appeler la méthode d'enregistrement
-                  }
-                },
-                child: const Text('Continuer', style: TextStyle(color: Colors.white),),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 35,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _registerUser(); // Appeler la méthode d'enregistrement
+                    }
+                  },
+                  child: const Text('Continuer', style: TextStyle(color: Colors.white),),
+                ),
               ),
             ],
           ),

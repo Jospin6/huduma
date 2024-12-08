@@ -27,7 +27,8 @@ class _SignalerPageState extends State<SignalerPage> {
   }
 
   Future<void> _loadUserUID() async {
-    userUID = await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
+    userUID =
+        await UserPreferences.getUserUID(); // Utiliser la classe utilitaire
     setState(() {});
   }
 
@@ -59,7 +60,8 @@ class _SignalerPageState extends State<SignalerPage> {
           'lieu': lieu,
           'ville': ville,
           'description': description,
-          'photo': photo?.path, // Vous pouvez stocker le chemin de la photo ou l'URL après l'avoir téléchargée
+          'photo': photo
+              ?.path, // Vous pouvez stocker le chemin de la photo ou l'URL après l'avoir téléchargée
           'timestamp': FieldValue.serverTimestamp(), // Ajouter un timestamp
         });
 
@@ -104,12 +106,16 @@ class _SignalerPageState extends State<SignalerPage> {
         child: Column(
           children: [
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: 'Type de signalement'),
+              decoration:
+                  const InputDecoration(labelText: 'Type de signalement'),
               value: signalementType,
               items: signalementTypes.map((String type) {
                 return DropdownMenuItem<String>(
                   value: type,
-                  child: Text(type, style: const TextStyle(color: Colors.white),),
+                  child: Text(
+                    type,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 );
               }).toList(),
               onChanged: (String? newValue) {
@@ -170,15 +176,31 @@ class _SignalerPageState extends State<SignalerPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _pickImage,
-              child: const Text('Ajouter une photo', style: TextStyle(color: Colors.white),),
+              child: const Text(
+                'Ajouter une photo',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-            if (photo != null) Text('Photo sélectionnée: ${photo!.name}', style: const TextStyle(color: Colors.white),),
+            if (photo != null)
+              Text(
+                'Photo sélectionnée: ${photo!.name}',
+                style: const TextStyle(color: Colors.white),
+              ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: isLoading ? null : _submitForm, // Désactiver le bouton pendant le chargement
-              child: isLoading
-                  ? const CircularProgressIndicator() // Indicateur de chargement sur le bouton
-                  : const Text('Soumettre le signalement', style: TextStyle(color: Colors.white),),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 35,
+              child: ElevatedButton(
+                onPressed: isLoading
+                    ? null
+                    : _submitForm, // Désactiver le bouton pendant le chargement
+                child: isLoading
+                    ? const CircularProgressIndicator() // Indicateur de chargement sur le bouton
+                    : const Text(
+                        'Soumettre le signalement',
+                        style: TextStyle(color: Colors.white),
+                      ),
+              ),
             ),
           ],
         ),

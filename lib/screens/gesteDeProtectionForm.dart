@@ -43,12 +43,14 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
           'type_urgence': widget.typeUrgence,
           'titre': titre,
           'description': description,
-          'image': image!.path, // Vous pouvez stocker l'URL après téléchargement
+          'image':
+              image!.path, // Vous pouvez stocker l'URL après téléchargement
           'timestamp': FieldValue.serverTimestamp(),
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Geste de protection soumis avec succès!')),
+          const SnackBar(
+              content: Text('Geste de protection soumis avec succès!')),
         );
 
         // Réinitialiser le formulaire
@@ -64,12 +66,20 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
           isLoading = false; // Fin du chargement en cas d'erreur
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de la soumission: $e', style: const TextStyle(color: Colors.white),)),
+          SnackBar(
+              content: Text(
+            'Erreur lors de la soumission: $e',
+            style: const TextStyle(color: Colors.white),
+          )),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez remplir tous les champs et sélectionner une image.', style: TextStyle(color: Colors.white),)),
+        const SnackBar(
+            content: Text(
+          'Veuillez remplir tous les champs et sélectionner une image.',
+          style: TextStyle(color: Colors.white),
+        )),
       );
     }
   }
@@ -77,7 +87,11 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Geste de Protection', style: TextStyle(color: Colors.white),)),
+      appBar: AppBar(
+          title: const Text(
+        'Geste de Protection',
+        style: TextStyle(color: Colors.white),
+      )),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -111,16 +125,30 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _pickImage,
-                child: const Text('Sélectionner une image', style: TextStyle(color: Colors.white),),
+                child: const Text(
+                  'Sélectionner une image',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               const SizedBox(height: 10),
-              if (image != null) Text('Image sélectionnée: ${image!.name}', style: const TextStyle(color: Colors.white),),
+              if (image != null)
+                Text(
+                  'Image sélectionnée: ${image!.name}',
+                  style: const TextStyle(color: Colors.white),
+                ),
               const SizedBox(height: 16),
               isLoading
                   ? const CircularProgressIndicator() // Indicateur de chargement
-                  : ElevatedButton(
-                      onPressed: _submitForm,
-                      child: const Text('Valider', style: TextStyle(color: Colors.white),),
+                  : SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 35,
+                      child: ElevatedButton(
+                        onPressed: _submitForm,
+                        child: const Text(
+                          'Valider',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
             ],
           ),

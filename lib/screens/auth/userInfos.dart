@@ -80,9 +80,13 @@ class _UserInfosState extends State<UserInfos> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitForm, // Appeler la méthode de soumission
-                child: const Text('Soumettre', style: TextStyle(color: Colors.white),),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 35,
+                child: ElevatedButton(
+                  onPressed: _submitForm, // Appeler la méthode de soumission
+                  child: const Text('Soumettre', style: TextStyle(color: Colors.white),),
+                ),
               ),
             ],
           ),
