@@ -93,7 +93,7 @@ class _GesteDeProtectionFormState extends State<GesteDeProtectionForm> {
         style: TextStyle(color: Colors.white),
       )),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 16.0, left: 30, right: 30),
         child: Form(
           key: _formKey,
           child: Column(
