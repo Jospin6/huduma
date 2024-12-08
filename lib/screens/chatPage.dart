@@ -74,11 +74,15 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         messages.clear();
         for (var doc in snapshot.docs) {
-          messages.add(Message(
-            text: doc['message'],
-            isUser: doc['userUID'] == userUID,
-            imageUrl: doc['imageUrl'], // Récupérer l'URL de l'image
-          ));
+          if (doc.data().containsKey('message') &&
+              doc.data().containsKey('userUID')) {
+            messages.add(Message(
+              text: doc['message'],
+              isUser: doc['userUID'] == userUID,
+              imageUrl:
+                  doc.data().containsKey('imageUrl') ? doc['imageUrl'] : null,
+            ));
+          }
         }
       });
     });
@@ -92,7 +96,8 @@ class _ChatPageState extends State<ChatPage> {
         isLoading = true; // Démarrer le chargement
       });
       String imageUrl = await _uploadImage(File(image.path));
-      _sendMessage(imageUrl: imageUrl); // Envoyer le message avec l'URL de l'image
+      _sendMessage(
+          imageUrl: imageUrl); // Envoyer le message avec l'URL de l'image
       setState(() {
         isLoading = false; // Fin du chargement
       });
@@ -101,7 +106,8 @@ class _ChatPageState extends State<ChatPage> {
 
   Future<String> _uploadImage(File image) async {
     try {
-      String filePath = 'chat_images/${DateTime.now().millisecondsSinceEpoch}.png';
+      String filePath =
+          'chat_images/${DateTime.now().millisecondsSinceEpoch}.png';
       await _storage.ref(filePath).putFile(image);
       String downloadUrl = await _storage.ref(filePath).getDownloadURL();
       return downloadUrl;
@@ -115,13 +121,17 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat d\'Urgence ${widget.option['title']}', style: const TextStyle(color: Colors.white),),
+        title: Text(
+          'Chat d\'Urgence ${widget.option['title']}',
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              reverse: true, // Pour afficher les messages les plus récents en haut
+              reverse:
+                  true, // Pour afficher les messages les plus récents en haut
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 return Align(
@@ -134,7 +144,8 @@ class _ChatPageState extends State<ChatPage> {
                         : CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: messages[index].isUser
@@ -151,7 +162,8 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                         ),
                       ),
-                      if (messages[index].imageUrl != null && messages[index].imageUrl!.isNotEmpty)
+                      if (messages[index].imageUrl != null &&
+                          messages[index].imageUrl!.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: Image.network(
@@ -172,7 +184,10 @@ class _ChatPageState extends State<ChatPage> {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.add_a_photo, color: Colors.grey,),
+                  icon: const Icon(
+                    Icons.add_a_photo,
+                    color: Colors.grey,
+                  ),
                   onPressed: _pickImage,
                 ),
                 Expanded(
@@ -185,12 +200,15 @@ class _ChatPageState extends State<ChatPage> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: Colors.grey[200],
+                      fillColor: const Color.fromARGB(255, 26, 24, 24),
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Colors.grey,),
+                  icon: const Icon(
+                    Icons.send,
+                    color: Colors.grey,
+                  ),
                   onPressed: () => _sendMessage(),
                 ),
               ],

@@ -3,7 +3,7 @@ import 'package:huduma/screens/alerteHistoryPage.dart';
 import 'package:huduma/screens/contactsPage.dart';
 import 'package:huduma/screens/homePage.dart';
 import 'package:huduma/screens/infosPage.dart';
-import 'package:huduma/screens/messageriePage.dart';
+// import 'package:huduma/screens/messageriePage.dart';
 import 'package:huduma/screens/notificationsPage.dart';
 import 'package:huduma/screens/signalerPage.dart';
 
@@ -29,21 +29,12 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
         title: [
           const Text("Huduma"),
-          const Text("Messagerie"),
+          const Text("Mes alertes"),
           const Text("Signaler"),
           const Text("Notifications"),
           const Text("Infos")
         ][_currentIndex],
         actions: [
-          IconButton(
-              onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AlertHistoryPage()),
-                    )
-                  },
-              icon: const Icon(Icons.alarm)),
           IconButton(
               onPressed: () => {
                     Navigator.push(
@@ -57,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       ),
       body: [
         const HomePage(),
-        const MessageriePage(),
+        const AlertHistoryPage(),
         const SignalerPage(),
         const NotificationsPage(),
         const InfosPage()
@@ -71,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         elevation: 10,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Accueil"),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+          BottomNavigationBarItem(icon: Icon(Icons.alarm), label: "Mes alertes"),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add"),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications), label: "Notif"),

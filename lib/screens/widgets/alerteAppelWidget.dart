@@ -21,23 +21,23 @@ class AlerteAppelWidget extends StatelessWidget {
         );
 
         try {
+          final contacts = await _getContacts();
+          Position position = await _getUserLocation();
+          // Récupérer le nom de l'utilisateur
+          String userName = await _getUserName(userUID!);
+
+          await _saveEmergencyAlert(position);
           if (await canLaunchUrl(launchUri)) {
             await launchUrl(launchUri);
           } else {
             throw 'Impossible de lancer $launchUri';
-          }
-
-          final contacts = await _getContacts();
-          Position position = await _getUserLocation();
-
-          // Récupérer le nom de l'utilisateur
-          String userName = await _getUserName(userUID!);
+          } 
 
           for (var contact in contacts) {
             await _sendSms(contact['phone'], position, userName);
           }
 
-          await _saveEmergencyAlert(position);
+          
 
           await FirebaseFirestore.instance.collection('notifications').add({
             'titre': option['title'],
