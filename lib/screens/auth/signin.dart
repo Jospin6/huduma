@@ -79,7 +79,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       appBar: AppBar(title: const Text('Enregistrer vos infos', style: TextStyle(color: Colors.white),)),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 16.0, left: 30, right: 30),
         child: Form(
           key: _formKey,
           child: Column(

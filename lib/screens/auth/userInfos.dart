@@ -44,7 +44,7 @@ class _UserInfosState extends State<UserInfos> {
     return Scaffold(
       appBar: AppBar(title: const Text('Informations supplémentaires', style: TextStyle(color: Colors.white),)),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 16.0, left: 30, right: 30),
         child: Form(
           key: _formKey,
           child: Column(
