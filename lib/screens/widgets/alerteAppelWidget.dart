@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_sms/flutter_sms.dart';
+// import 'package:flutter_sms/flutter_sms.dart';
 
 class AlerteAppelWidget extends StatelessWidget {
   final String? userUID;
@@ -21,10 +21,10 @@ class AlerteAppelWidget extends StatelessWidget {
         );
 
         try {
-          final contacts = await _getContacts();
+          // final contacts = await _getContacts();
           Position position = await _getUserLocation();
           // Récupérer le nom de l'utilisateur
-          String userName = await _getUserName(userUID!);
+          // String userName = await _getUserName(userUID!);
 
           await _saveEmergencyAlert(position);
           if (await canLaunchUrl(launchUri)) {
@@ -33,9 +33,9 @@ class AlerteAppelWidget extends StatelessWidget {
             throw 'Impossible de lancer $launchUri';
           } 
 
-          for (var contact in contacts) {
-            await _sendSms(contact['phone'], position, userName);
-          }
+          // for (var contact in contacts) {
+          //   await _sendSms(contact['phone'], position, userName);
+          // }
 
           
 
@@ -98,23 +98,23 @@ class AlerteAppelWidget extends StatelessWidget {
     }
   }
 
-  Future<void> _sendSms(String phone, Position position, String userName) async {
-    String message =
-        'Alerte, $userName vient de lancer une alerte ${option['title']} '
-        'il se trouve à ${position.latitude}, ${position.longitude}. '
-        'Veuillez l\'assister ou appeler les services d\'urgence appropriés pour son secours, merci.';
+  // Future<void> _sendSms(String phone, Position position, String userName) async {
+  //   String message =
+  //       'Alerte, $userName vient de lancer une alerte ${option['title']} '
+  //       'il se trouve à ${position.latitude}, ${position.longitude}. '
+  //       'Veuillez l\'assister ou appeler les services d\'urgence appropriés pour son secours, merci.';
 
-    try {
-      String result = await sendSMS(message: message, recipients: [phone])
-          // ignore: body_might_complete_normally_catch_error
-          .catchError((onError) {
-        print(onError);
-      });
-      print('Résultat de l\'envoi: $result');
-    } catch (e) {
-      print('Erreur lors de l\'envoi du SMS à $phone: $e');
-    }
-  }
+  //   try {
+  //     String result = await sendSMS(message: message, recipients: [phone])
+  //         // ignore: body_might_complete_normally_catch_error
+  //         .catchError((onError) {
+  //       print(onError);
+  //     });
+  //     print('Résultat de l\'envoi: $result');
+  //   } catch (e) {
+  //     print('Erreur lors de l\'envoi du SMS à $phone: $e');
+  //   }
+  // }
 
   Future<void> _saveEmergencyAlert(Position position) async {
     await FirebaseFirestore.instance.collection('alerte_urgence').add({
